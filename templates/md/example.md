@@ -1,4 +1,5 @@
-{{ define "example" }}<details><summary>Example</summary>
+{{ define "example" }}<details>
+<summary>Example</summary>
 <p>{{ if .Name }}
 [{{ .Name }}]({{ if .Filename }}<{{ .Filename }}{{ if .Line }}#L{{ .Line }}{{ end }}>{{ end }})
 {{- end }}{{ if .Doc }}

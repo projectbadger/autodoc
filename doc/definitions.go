@@ -5,6 +5,8 @@ import (
 	"go/doc"
 	"go/printer"
 	"path/filepath"
+
+	"github.com/projectbadger/autodoc/config"
 )
 
 type Var struct {
@@ -170,14 +172,22 @@ func AddTypeMethod(data *Type, node *doc.Func) {
 }
 
 type Package struct {
-	Name       string
-	Definition string
-	Doc        string
-	Examples   []*Example
-	Funcs      []*Func
-	Types      []*Type
-	Constants  []*Const
-	Vars       []*Var
+	Name         string
+	Definition   string
+	Doc          string
+	Examples     []*Example
+	Funcs        []*Func
+	Types        []*Type
+	Constants    []*Const
+	Vars         []*Var
+	ShowName     bool
+	ShowDoc      bool
+	ShowExamples bool
+	ShowIndex    bool
+	ShowFuncs    bool
+	ShowTypes    bool
+	ShowConsts   bool
+	ShowVars     bool
 }
 
 func ParsePackage(docs *doc.Package) *Package {
@@ -194,11 +204,31 @@ func ParsePackage(docs *doc.Package) *Package {
 	for _, val := range docs.Types {
 		AddType(p, val)
 	}
+	for _, val := range docs.Vars {
+		AddVar(p, val)
+	}
 	for _, val := range docs.Consts {
 		AddConst(p, val)
 	}
-	for _, val := range docs.Vars {
-		AddVar(p, val)
+	for _, v := range config.Cfg.IncludedData {
+		switch v {
+		case "name", "n":
+			p.ShowName = true
+		case "doc", "d":
+			p.ShowDoc = true
+		case "examples", "ex":
+			p.ShowExamples = true
+		case "index", "i":
+			p.ShowIndex = true
+		case "functions", "f":
+			p.ShowFuncs = true
+		case "types", "t":
+			p.ShowTypes = true
+		case "constants", "c":
+			p.ShowConsts = true
+		case "variables", "v":
+			p.ShowVars = true
+		}
 	}
 
 	return p

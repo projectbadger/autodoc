@@ -9,6 +9,7 @@ import (
 	"go/parser"
 	"go/token"
 	"io/fs"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -43,6 +44,30 @@ func GetGoFiles(path string) []*ast.File {
 	return astFiles
 }
 
+func GetGoFilesInDir(path string) []*ast.File {
+	var astFiles []*ast.File
+	dirFiles, err := os.ReadDir(path)
+	if err != nil {
+		return nil
+	}
+	for _, d := range dirFiles {
+		if d.IsDir() {
+			continue
+		}
+		if filepath.Ext(d.Name()) == ".go" {
+			newFile, err := parser.ParseFile(fileset, filepath.Join(path, d.Name()), nil, parser.ParseComments|parser.AllErrors)
+			if err != nil {
+				fmt.Println("error:", err)
+				return nil
+			}
+			astFiles = append(astFiles, newFile)
+			// fmt.Printf("appended: '%#v'\n", d.Name())
+
+		}
+	}
+	return astFiles
+}
+
 var (
 	blacklistedDirNames = []string{
 		"node_modules",
@@ -74,7 +99,7 @@ func GetDirectories(path string) []string {
 }
 
 func GetPackageDocumentation(packageFilePath, packageImportPath string) (*doc.Package, error) {
-	files := GetGoFiles(packageFilePath)
+	files := GetGoFilesInDir(packageFilePath)
 	// fmt.Printf("Got files: '%#v', files, from %s", files, packageFilePath)
 	return doc.NewFromFiles(fileset, files, packageImportPath)
 }
