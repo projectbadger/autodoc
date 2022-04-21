@@ -35,16 +35,9 @@ autodoc -package . -included-data all,-types,-vars,-constants,
 
 ## Subpackages
 
-- [config](github.com/projectbadger/autodoc/tree/main/config)
-- [doc](github.com/projectbadger/autodoc/tree/main/doc)
-- [templates](github.com/projectbadger/autodoc/tree/main/templates)
-- [functions](github.com/projectbadger/autodoc/tree/main/templates/functions)
-- [md](github.com/projectbadger/autodoc/tree/main/templates/md)
-
-
-- [config](blob/main//config)
-- [doc](blob/main//doc)
-- [templates](blob/main//templates)
-- [functions](blob/main//templates/functions)
-- [md](blob/main//templates/md)
+- [config](/config)
+- [doc](/doc)
+- [templates](/templates)
+- [functions](/templates/functions)
+- [md](/templates/md)
 
