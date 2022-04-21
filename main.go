@@ -13,13 +13,13 @@ import (
 )
 
 func main() {
-	if len(os.Args) > 2 {
-		// Extract module path
-		log.Println("args:", os.Args)
+	// if len(os.Args) > 2 {
+	// 	// Extract module path
+	// 	log.Println("args:", os.Args)
 
-		os.Args = append(os.Args[:1], os.Args[2:]...)
-		log.Println("args:", os.Args)
-	}
+	// 	os.Args = append(os.Args[:1], os.Args[2:]...)
+	// 	log.Println("args:", os.Args)
+	// }
 	err := templates.SetupTemplates()
 	if err != nil {
 		log.Fatalln((err))
@@ -54,5 +54,5 @@ func Output(str string) {
 			log.Fatalln(err)
 		}
 	}
-	fmt.Printf("%s", str)
+	fmt.Printf("%s\n", str)
 }

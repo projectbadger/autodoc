@@ -3,7 +3,6 @@ templates:
   templates_dir: ".autodoc"
   link_construction: "github"
   included_data:
-  - name
   - overview
   - subpackages
   custom_vars:

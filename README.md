@@ -1,6 +1,5 @@
 
-Autodoc
-# AutodocGolang AutoDoc
+# Autodoc
 
 Autodoc is a golang documentation tool. It  generates package documentation from a provided path.
 
@@ -41,3 +40,11 @@ autodoc -package . -included-data all,-types,-vars,-constants,
 - [templates](github.com/projectbadger/autodoc/tree/main/templates)
 - [functions](github.com/projectbadger/autodoc/tree/main/templates/functions)
 - [md](github.com/projectbadger/autodoc/tree/main/templates/md)
+
+
+- [config](blob/main//config)
+- [doc](blob/main//doc)
+- [templates](blob/main//templates)
+- [functions](blob/main//templates/functions)
+- [md](blob/main//templates/md)
+

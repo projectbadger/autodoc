@@ -1,4 +1,4 @@
-{{ define "overview" }}# {{ if .CustomVars }}{{ if index .CustomVars "name" }}{{ index .CustomVars "name" }}{{ else }}Golang Autodoc{{ end }}{{ else }}Golang Autodoc{{ end }}Golang AutoDoc
+{{ define "overview" }}# {{ index .CustomVars "name" }}
 
 Autodoc is a golang documentation tool. It  generates package documentation from a provided path.
 

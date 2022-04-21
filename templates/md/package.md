@@ -1,6 +1,5 @@
 {{ define "package" }}{{ if .ShowName }}
-{{ if .CustomVars }}{{ if index .CustomVars "name" }}{{ index .CustomVars "name" }}{{ else }}{{ if .Name }}# {{ .Name }}
-{{ end }}{{ end }}{{ else }}{{ if .Name }}# {{ .Name }}
+{{ if index .CustomVars "name" }}# {{ index .CustomVars "name" }}{{ else }}{{ if .Name }}# {{ .Name }}
 {{ end }}{{ end }}{{ end }}{{ if .ShowImportPath }}{{ if .ImportPath }}
 ```go
 import {{ .ImportPath }}
