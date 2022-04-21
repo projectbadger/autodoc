@@ -1,7 +1,0 @@
-templates:
-  # templates_dir: ".autodoc"
-  link_construction: "github"
-  custom_vars: []
-  import_path: github.com/projectbadger/autodoc
-custom_vars:
-  - created-command=go run main.go -package ${PACKAGE_NAME} -config .autodoc/config.package.yml
