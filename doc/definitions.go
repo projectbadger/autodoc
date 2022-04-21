@@ -23,10 +23,6 @@ type Var struct {
 }
 
 func AddVar(data *Package, node *doc.Value, path string) {
-	// _, ok := filesets[path]
-	// if !ok {
-	// 	filesets[path] = token.NewFileSet()
-	// }
 	var buf = bytes.NewBuffer(nil)
 	printer.Fprint(buf, filesets[path], node.Decl)
 	position := filesets[path].Position(node.Decl.Pos())
@@ -422,7 +418,6 @@ func SeekGoMod(pkg *Package, path string, levels int) error {
 	if err != nil {
 		return err
 	}
-	// absPathSPlit := strings.Split(absPath, "/")
 	rel := ""
 	for i := 1; i <= levels; i++ {
 		err = ParseGoMod(pkg, path)

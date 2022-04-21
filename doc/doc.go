@@ -117,18 +117,12 @@ func GetPackageDocumentation(packageFilePath, packageImportPath string) (*doc.Pa
 }
 
 func parseComment(format uint, comment string) string {
-	switch format {
-	case 0:
-		// Markdown
-	}
-	// bytesInit := make([]byte, 512)
 	buf := bytes.NewBuffer(nil)
 	textBuf := bytes.NewReader([]byte(comment))
 	scanner := bufio.NewScanner(textBuf)
 	isCode := false
 	isCodePrev := false
 	codeIndentPrefix := "\t"
-	// codeIndentNum := 1
 	for scanner.Scan() {
 		isCodePrev = isCode
 		line := scanner.Text()
@@ -143,23 +137,18 @@ func parseComment(format uint, comment string) string {
 			lineLen := len(line)
 			for i := 0; i < lineLen; i++ {
 				if line[i] != codeIndentPrefix[0] {
-					// codeIndentNum = i
 					codeIndentPrefix = line[:i]
 					break
 				}
 			}
 			buf.WriteString("```go\n")
-			// buf.WriteString("\n")
 			buf.WriteString(strings.TrimPrefix(line, codeIndentPrefix))
 		} else if !isCode && isCodePrev {
 			// Code end
 			buf.WriteString(strings.TrimPrefix(line, codeIndentPrefix))
-			// buf.Write(mdCodeBlock)
-			// buf.WriteByte('\n')
 			buf.WriteString("\n```\n")
 		} else {
 			buf.WriteString(line)
-			// buf.WriteByte('\n')
 			buf.WriteString("\n")
 		}
 	}

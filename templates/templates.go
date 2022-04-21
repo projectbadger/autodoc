@@ -11,7 +11,8 @@ import (
 	"github.com/projectbadger/autodoc/templates/md"
 )
 
-// SaveToFile saves the config to a file in YAML format
+// OutputTemplatesToDir creates template files in the
+// specified directory
 func OutputTemplatesToDir(path string) error {
 	if path == "" {
 		path = "."
@@ -43,13 +44,10 @@ func OutputTemplatesToDir(path string) error {
 		}
 	}
 	return nil
-	// return os.WriteFile(path, configYaml, 0644)
 }
 
-func ReplaceTemplates() error {
-	return md.ReplaceTemplates()
-}
-
+// SetupTemplates sets the templates and template overrides
+// according to the config.
 func SetupTemplates() error {
 	if config.Cfg.Templates.OutputTemplates != "" {
 		fmt.Printf("Outputting templates to '%s'\n", config.Cfg.Templates.OutputTemplates)
@@ -62,13 +60,12 @@ func SetupTemplates() error {
 	}
 	if config.Cfg.Templates.TemplatesDir != "" {
 		// fmt.Printf("Parsing templates from '%s'\n", config.Cfg.TemplatesDir)
-		err := ReplaceTemplates()
+		err := md.ReplaceTemplates()
 		if err != nil {
 			fmt.Printf("Error saving to file: '%q'", err)
 			os.Exit(1)
 		}
 	}
-	// fmt.Printf("Set up templates\n")
 
 	return nil
 }

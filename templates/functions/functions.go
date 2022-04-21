@@ -24,6 +24,7 @@ func toMDHeadingHREFGit(importPath, heading string) string {
 	return filepath.Join(importPath, config.Cfg.Templates.GetLinkPrefix(), headingMDLinkRegex.ReplaceAllLiteralString(heading, ""))
 }
 
+// GetTemplateFuncMap returns the template function map
 func GetTemplateFuncMap() template.FuncMap {
 	return template.FuncMap{
 		"headingLink":    toMDHeadingHREF,

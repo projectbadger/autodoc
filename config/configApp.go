@@ -2,8 +2,6 @@ package config
 
 import (
 	"fmt"
-
-	// "github.com/projectbadger/autodoc/filters"
 	"os"
 
 	"gopkg.in/yaml.v2"
@@ -11,13 +9,9 @@ import (
 
 // ConfigApp holds all the application configuration data.
 type ConfigApp struct {
-	File         string `default:"" json:"-" yaml:"-" cli:"config Config file path\n     "`
-	CreateConfig string `default:"" yaml:"-" json:"-" cli:"create-config Create a named default config file with cli parameters and environment variables.\n   "`
-	Output       string `json:"output" yaml:"output" cli:"output Output the generated documentation to file\n    "`
-	// DebugMode    bool   `default:"false" yaml:"-" json:"-" cli:"debug Run the app in debug mode\n   "`
-	// LoginUrl     string                `default:"" json:"login_url" yaml:"login_url" cli:"login-url Login URL to appear at the top of the page\n      "`
-	// LogoutUrl    string                `default:"" json:"logout_url" yaml:"logout_url" cli:"logout-url Logout URL to appear at the top of the page\n      "`
-	// Filters     filters.RequestFilter `json:"filters" yaml:"filters"`
+	File         string          `default:"" json:"-" yaml:"-" cli:"config Config file path\n     "`
+	CreateConfig string          `default:"" yaml:"-" json:"-" cli:"create-config Create a named default config file with cli parameters and environment variables.\n   "`
+	Output       string          `json:"output" yaml:"output" cli:"output Output the generated documentation to file\n    "`
 	PackageDir   string          `default:"." json:"package_dir" yaml:"package_dir" cli:"package Package directory filepath.\nThe contents of this directory will be parsed as a Go package\n      "`
 	ModuleDir    string          `default:"." json:"module_dir" yaml:"module_dir" cli:"module Module directory filepath.\nThe contents of this directory will be parsed as a Go module\n      "`
 	ExcludeDirs  []string        `default:"" json:"exclude_dirs" yaml:"exclude_dirs" cli:"exclude Exclude directories from the package search.\nDefault:\n  node_nodules;.git\n      "`
@@ -30,6 +24,8 @@ func (c *ConfigApp) IsVersion() bool {
 	return c.Version || c.VersionShort
 }
 
+// CheckIfVersion checks whether the version flag has been
+// set and prints the version and exits if it has.
 func (c *ConfigApp) CheckIsVersion() {
 	if c.Version || c.VersionShort {
 		fmt.Printf("Package:    %s\n", PackageName)
