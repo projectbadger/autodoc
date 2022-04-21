@@ -254,7 +254,7 @@ func ParsePackage(docs *doc.Package, path string) (*Package, error) {
 		p.ImportPath = docs.ImportPath
 		// fmt.Println("Import:", docs.ImportPath)
 	} else {
-		ParseGoMod(p, path)
+		SeekGoMod(p, path, 3)
 		// fmt.Println("parsed import:", p.ImportPath)
 	}
 	// fmt.Println("p.Doc:", p.Doc)
@@ -340,10 +340,12 @@ func ParsePackage(docs *doc.Package, path string) (*Package, error) {
 }
 
 func GetPackageDataFromDirRecursive(path string) (*Package, error) {
+
 	p, err := GetPackageDataFromDir(path)
 	if err != nil {
 		return nil, err
 	}
+	// SeekGoMod(p, path, 3)
 	p.Subpackages, err = GetPackagesDataFromDirRecursive(path, false, p.ImportPath)
 	return p, err
 }
@@ -411,6 +413,29 @@ func ParseGoMod(pkg *Package, path string) error {
 
 	if err := scanner.Err(); err != nil {
 		return err
+	}
+	return nil
+}
+
+func SeekGoMod(pkg *Package, path string, levels int) error {
+	path, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+	// absPathSPlit := strings.Split(absPath, "/")
+	rel := ""
+	for i := 1; i <= levels; i++ {
+		err = ParseGoMod(pkg, path)
+		if err == nil {
+			pkg.ImportPath += "/" + rel
+			break
+		}
+		if rel == "" {
+			rel = filepath.Base(path)
+		} else {
+			rel = filepath.Base(path) + "/" + rel
+		}
+		path = filepath.Dir(path)
 	}
 	return nil
 }

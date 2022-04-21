@@ -1,6 +1,10 @@
 
 # templates
 
+```go
+import github.com/projectbadger/autodoc/templates
+```
+
 Documentation templates
 
 ## Index

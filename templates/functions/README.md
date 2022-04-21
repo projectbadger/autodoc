@@ -1,6 +1,10 @@
 
 # functions
 
+```go
+import github.com/projectbadger/autodoc/templates/functions
+```
+
 ## Index
 
 - [func GetTemplateFuncMap() template.FuncMap](#func-gettemplatefuncmap-templatefuncmap)

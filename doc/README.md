@@ -1,6 +1,10 @@
 
 # doc
 
+```go
+import github.com/projectbadger/autodoc/doc
+```
+
 ## Index
 
 - [func AddConst(data *Package, node *doc.Value, path string)](#func-addconst-package-node-docvalue-path-string)
@@ -19,6 +23,7 @@
 - [func GetPackagesDataFromDirRecursive(dirPath string, includeRoot bool, rootImportPath string) (map[string]*Package, error)](#func-getpackagesdatafromdirrecursive-string-includeroot-bool-rootimportpath-string-stringpackage-error)
 - [func ParseGoMod(pkg *Package, path string) error](#func-parsegomod-package-path-string-error)
 - [func ParseGoModFile(module *Module, path string) error](#func-parsegomodfile-module-path-string-error)
+- [func SeekGoMod(pkg *Package, path string, levels int) error](#func-seekgomod-package-path-string-levels-int-error)
 - [type Const](#const)
 - [type Example](#example)
 - [type Func](#func)
@@ -96,12 +101,12 @@ func GetGoFilesInDir(path string) []*ast.File
 ```go
 func GetPackageDocumentation(packageFilePath, packageImportPath string) (*doc.Package, error)
 ```
-## func [GetPackagesDataFromDirRecursive](<definitions.go#L360>)
+## func [GetPackagesDataFromDirRecursive](<definitions.go#L362>)
 
 ```go
 func GetPackagesDataFromDirRecursive(dirPath string, includeRoot bool, rootImportPath string) (map[string]*Package, error)
 ```
-## func [ParseGoMod](<definitions.go#L396>)
+## func [ParseGoMod](<definitions.go#L398>)
 
 ```go
 func ParseGoMod(pkg *Package, path string) error
@@ -110,6 +115,11 @@ func ParseGoMod(pkg *Package, path string) error
 
 ```go
 func ParseGoModFile(module *Module, path string) error
+```
+## func [SeekGoMod](<definitions.go#L420>)
+
+```go
+func SeekGoMod(pkg *Package, path string, levels int) error
 ```
 
 
@@ -193,7 +203,7 @@ type Package struct {
 }
 ```
 
-## func [GetPackageDataFromDir](<definitions.go#L351>)
+## func [GetPackageDataFromDir](<definitions.go#L353>)
 
 ```go
 func GetPackageDataFromDir(path string) (*Package, error)
