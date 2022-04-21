@@ -1,6 +1,7 @@
 package md
 
 import (
+	"bytes"
 	"embed"
 	"errors"
 	"fmt"
@@ -15,6 +16,10 @@ import (
 )
 
 var (
+	//go:embed mod.md
+	templateMod []byte
+	//go:embed subpackages.md
+	templateSubpackages []byte
 	//go:embed doc.md
 	templateDoc []byte
 	//go:embed package.md
@@ -31,6 +36,8 @@ var (
 	templateVars []byte
 	//go:embed constants.md
 	templateConstants []byte
+	//go:embed overview.md
+	templateOverview []byte
 	//go:embed vars.md constants.md example.md function.md type.md index.md package.md doc.md
 	TemplatesFS   embed.FS
 	TemplateDoc   *template.Template
@@ -46,6 +53,7 @@ func SetupTemplates() error {
 	// TemplateDoc, err = template.New("doc.md").Funcs(templates.GetTemplateFuncMap()).ParseFS(TemplatesFS, TemplateNames...)
 	TemplateDoc = template.New("doc.md").
 		Funcs(functions.GetTemplateFuncMap())
+	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateOverview)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateConstants)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateVars)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateExample)))
@@ -53,7 +61,9 @@ func SetupTemplates() error {
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateType)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateIndex)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templatePackage)))
+	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateSubpackages)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateDoc)))
+	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateMod)))
 
 	return err
 }
@@ -66,10 +76,10 @@ func init() {
 }
 
 func ReplaceTemplates() (err error) {
-	if config.Cfg.TemplatesDir == "" {
+	if config.Cfg.Templates.TemplatesDir == "" {
 		return nil
 	}
-	path, err := filepath.Abs(config.Cfg.TemplatesDir)
+	path, err := filepath.Abs(config.Cfg.Templates.TemplatesDir)
 	if err != nil {
 		return err
 	}
@@ -122,8 +132,26 @@ func ReplaceTemplates() (err error) {
 				fmt.Println("Error:", err)
 				return err
 			}
-		case "packindexage.md":
+		case "index.md":
 			templateIndex, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			if err != nil {
+				fmt.Println("Error:", err)
+				return err
+			}
+		case "subpackages.md":
+			templateSubpackages, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			if err != nil {
+				fmt.Println("Error:", err)
+				return err
+			}
+		case "overview.md":
+			templateOverview, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			if err != nil {
+				fmt.Println("Error:", err)
+				return err
+			}
+		case "mod.md":
+			templateMod, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return err
@@ -189,4 +217,13 @@ func OutputTemplatesToDir(path string) error {
 	}
 	return nil
 	// return os.WriteFile(path, configYaml, 0644)
+}
+
+func ExecuteTemplate(name string, data interface{}) (string, error) {
+	if name == "" {
+		name = "doc.md"
+	}
+	buf := bytes.NewBuffer(nil)
+	err := TemplateDoc.ExecuteTemplate(buf, name, data)
+	return buf.String(), err
 }

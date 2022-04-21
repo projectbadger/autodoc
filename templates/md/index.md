@@ -1,10 +1,7 @@
-{{ define "index" }}## Index
-{{ if .Funcs }}
-{{ range .Funcs }}
+{{ define "index" }}{{ if .Funcs }}{{ range .Funcs }}
 - [{{ .Definition }}](#{{ headingLink .Definition}})
 {{- end}}
-{{- end }}{{ if .Types }}
-{{ range .Types }}
+{{- end }}{{ if .Types }}{{ range .Types }}
 - [type {{ .Name }}](#{{ headingLink .Name}}){{ if .Funcs }}{{ range .Funcs }}
   - [{{ .Definition }}](#{{ headingLink .Definition}})
 {{- end }}{{ end }}{{ if .Methods }}{{ range .Methods }}

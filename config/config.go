@@ -86,6 +86,7 @@ func GetParsedConfig() (cfg *ConfigApp, err error) {
 func SetupConfig() error {
 	var err error
 	Cfg, err = GetParsedConfig()
+	Cfg.Templates.parseLinkConstruction()
 	return err
 }
 

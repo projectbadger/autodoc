@@ -15,11 +15,15 @@ import (
 )
 
 var (
-	fileset = token.NewFileSet()
+	filesets = make(map[string]*token.FileSet)
 )
 
 func GetGoFiles(path string) []*ast.File {
 	var astFiles []*ast.File
+	_, ok := filesets[path]
+	if !ok {
+		filesets[path] = token.NewFileSet()
+	}
 
 	filepath.WalkDir(path, func(s string, d fs.DirEntry, e error) error {
 		if e != nil {
@@ -30,7 +34,7 @@ func GetGoFiles(path string) []*ast.File {
 			return nil
 		}
 		if filepath.Ext(d.Name()) == ".go" {
-			newFile, err := parser.ParseFile(fileset, s, nil, parser.ParseComments|parser.AllErrors)
+			newFile, err := parser.ParseFile(filesets[path], s, nil, parser.ParseComments|parser.AllErrors)
 			if err != nil {
 				fmt.Println("error:", err)
 				return err
@@ -46,6 +50,10 @@ func GetGoFiles(path string) []*ast.File {
 
 func GetGoFilesInDir(path string) []*ast.File {
 	var astFiles []*ast.File
+	_, ok := filesets[path]
+	if !ok {
+		filesets[path] = token.NewFileSet()
+	}
 	dirFiles, err := os.ReadDir(path)
 	if err != nil {
 		return nil
@@ -55,7 +63,7 @@ func GetGoFilesInDir(path string) []*ast.File {
 			continue
 		}
 		if filepath.Ext(d.Name()) == ".go" {
-			newFile, err := parser.ParseFile(fileset, filepath.Join(path, d.Name()), nil, parser.ParseComments|parser.AllErrors)
+			newFile, err := parser.ParseFile(filesets[path], filepath.Join(path, d.Name()), nil, parser.ParseComments|parser.AllErrors)
 			if err != nil {
 				fmt.Println("error:", err)
 				return nil
@@ -99,9 +107,13 @@ func GetDirectories(path string) []string {
 }
 
 func GetPackageDocumentation(packageFilePath, packageImportPath string) (*doc.Package, error) {
+	_, ok := filesets[packageFilePath]
+	if !ok {
+		filesets[packageFilePath] = token.NewFileSet()
+	}
 	files := GetGoFilesInDir(packageFilePath)
 	// fmt.Printf("Got files: '%#v', files, from %s", files, packageFilePath)
-	return doc.NewFromFiles(fileset, files, packageImportPath)
+	return doc.NewFromFiles(filesets[packageFilePath], files, packageImportPath)
 }
 
 func parseComment(format uint, comment string) string {

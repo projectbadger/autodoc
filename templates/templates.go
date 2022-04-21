@@ -51,16 +51,16 @@ func ReplaceTemplates() error {
 }
 
 func SetupTemplates() error {
-	if config.Cfg.OutputTemplates != "" {
-		fmt.Printf("Outputting templates to '%s'\n", config.Cfg.OutputTemplates)
-		err := OutputTemplatesToDir(config.Cfg.OutputTemplates)
+	if config.Cfg.Templates.OutputTemplates != "" {
+		fmt.Printf("Outputting templates to '%s'\n", config.Cfg.Templates.OutputTemplates)
+		err := OutputTemplatesToDir(config.Cfg.Templates.OutputTemplates)
 		if err != nil {
 			fmt.Printf("Error saving to file: '%q'", err)
 			os.Exit(1)
 		}
 		os.Exit(0)
 	}
-	if config.Cfg.TemplatesDir != "" {
+	if config.Cfg.Templates.TemplatesDir != "" {
 		// fmt.Printf("Parsing templates from '%s'\n", config.Cfg.TemplatesDir)
 		err := ReplaceTemplates()
 		if err != nil {

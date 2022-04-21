@@ -1,8 +1,10 @@
+// Autodoc main package
 package main
 
 import (
-	"bytes"
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/projectbadger/autodoc/config"
 	"github.com/projectbadger/autodoc/doc"
@@ -11,21 +13,46 @@ import (
 )
 
 func main() {
+	if len(os.Args) > 2 {
+		// Extract module path
+		log.Println("args:", os.Args)
+
+		os.Args = append(os.Args[:1], os.Args[2:]...)
+		log.Println("args:", os.Args)
+	}
 	err := templates.SetupTemplates()
 	if err != nil {
-		panic(err)
+		log.Fatalln((err))
 	}
-	// if len(os.Args) < 3 {
-	// 	fmt.Println("Usage: go run main.go [ name | doc ] package_path")
-	// 	os.Exit(1)
-	// }
+	if config.Cfg.ModuleDir != "" {
+		module, err := doc.ParseModule(config.Cfg.PackageDir)
+		if err != nil {
+			log.Fatalln((err))
+		}
+		str, err := md.ExecuteTemplate("mod.md", module)
+		if err != nil {
+			log.Fatalln((err))
+		}
+		Output(str)
+	} else if config.Cfg.PackageDir != "" {
+		data, err := doc.GetPackageDataFromDirRecursive(config.Cfg.PackageDir)
+		if err != nil {
+			log.Fatalln((err))
+		}
+		str, err := md.ExecuteTemplate("doc.md", data)
+		if err != nil {
+			log.Fatalln((err))
+		}
+		Output(str)
+	}
+}
 
-	docs, err := doc.GetPackageDocumentation(config.Cfg.PackageDir, config.Cfg.ImportPath)
-	if err != nil {
-		panic(err)
+func Output(str string) {
+	if config.Cfg.Output != "" {
+		err := os.WriteFile(config.Cfg.Output, []byte(config.Cfg.Output), 0664)
+		if err != nil {
+			log.Fatalln(err)
+		}
 	}
-	data := doc.ParsePackage(docs)
-	buf := bytes.NewBuffer(nil)
-	md.TemplateDoc.ExecuteTemplate(buf, "doc.md", data)
-	fmt.Println(buf.String())
+	fmt.Printf("%s", str)
 }

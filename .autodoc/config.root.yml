@@ -1,0 +1,13 @@
+package_dir: .
+templates:
+  templates_dir: ".autodoc"
+  link_construction: "github"
+  included_data:
+  - name
+  - overview
+  - subpackages
+  custom_vars:
+    - name=Autodoc
+    - is-root
+    - created-command=go run main.go -config .autodoc/config.root.yml > README.md
+  import_path: github.com/projectbadger/autodoc

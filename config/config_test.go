@@ -9,6 +9,6 @@ import (
 func Example() {
 	// config package is initialized immediately,
 	// so values can be called directly
-	fmt.Println(config.Cfg.ServiceName)
-	// Output: webmail
+	fmt.Println(config.Cfg.PackageDir)
+	// Output: .
 }
