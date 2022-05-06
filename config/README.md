@@ -34,6 +34,7 @@ configFilePath := config.Cfg.File
 ## Index
 
 - [func SetupConfig() error](#func-setupconfig-error)
+
 - [type Config](#config)
 - [type ConfigApp](#configapp)
   - [func GetParsedConfig() (cfg *ConfigApp, err error)](#func-getparsedconfig--configapp-err-error)
@@ -45,6 +46,20 @@ configFilePath := config.Cfg.File
 - [type ConfigTemplates](#configtemplates)
   - [func (c ConfigTemplates) GetLinkPrefix() string](#func--configtemplates-getlinkprefix-string)
   - [func (c *ConfigTemplates) SetupDefault()](#func--configtemplates-setupdefault)
+- [Variables](#variables)
+
+## Variables
+```go
+var (
+	// Main application configuration data.
+	Cfg	*ConfigApp
+	// supplied through ldflags
+	PackageName	= "github.com/projectbadger/autodoc"
+	Version		= "development"
+	BuildTime	= ""
+)
+
+```
 
 ## func [SetupConfig](<config.go#L86>)
 

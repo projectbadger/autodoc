@@ -18,7 +18,11 @@ import {{ .ImportPath }}
 {{ end }}{{ if .ShowIndex }}
 ## Index
 {{ template "index" . }}
-{{ end }}{{ if .ShowFuncs }}{{ if .Funcs }}
+{{ end }}{{ if .ShowConsts }}{{ if .Constants }}
+{{ template "constants" . }}{{ end }}
+{{- end }}{{ if .ShowVars }}{{ if .Vars }}
+{{ template "vars" . }}{{ end }}
+{{- end }}{{ if .ShowFuncs }}{{ if .Funcs }}
 {{ range .Funcs }}{{ template "function" . }}{{ end }}
 {{- end }}{{ end }}{{ if .ShowTypes }}{{ if .Types }}
 {{ range .Types }}{{ template "type" . }}{{ end }}

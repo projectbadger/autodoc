@@ -19,6 +19,7 @@
 - [func GetPackagesDataFromDirRecursive(dirPath string, includeRoot bool, rootImportPath string) (map[string]*Package, error)](#func-getpackagesdatafromdirrecursive-string-includeroot-bool-rootimportpath-string-stringpackage-error)
 - [func ParseGoMod(pkg *Package, path string) error](#func-parsegomod-package-path-string-error)
 - [func ParseGoModFile(module *Module, path string) error](#func-parsegomodfile-module-path-string-error)
+
 - [type Const](#const)
 - [type Example](#example)
 - [type Func](#func)

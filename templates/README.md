@@ -9,6 +9,7 @@ Documentation templates
 - [func ReplaceTemplates() error](#func-replacetemplates-error)
 - [func SetupTemplates() error](#func-setuptemplates-error)
 
+
 ## func [OutputTemplatesToDir](<templates.go#L15>)
 
 SaveToFile saves the config to a file in YAML format
