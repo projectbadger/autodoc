@@ -24,17 +24,18 @@ func main() {
 	if err != nil {
 		log.Fatalln((err))
 	}
-	if config.Cfg.ModuleDir != "" {
-		module, err := doc.ParseModule(config.Cfg.PackageDir)
-		if err != nil {
-			log.Fatalln((err))
-		}
-		str, err := md.ExecuteTemplate("mod.md", module)
-		if err != nil {
-			log.Fatalln((err))
-		}
-		Output(str)
-	} else if config.Cfg.PackageDir != "" {
+	// if config.Cfg.ModuleDir != "" {
+	// 	module, err := doc.ParseModule(config.Cfg.PackageDir)
+	// 	if err != nil {
+	// 		log.Fatalln((err))
+	// 	}
+	// 	str, err := md.ExecuteTemplate("mod.md", module)
+	// 	if err != nil {
+	// 		log.Fatalln((err))
+	// 	}
+	// 	Output(str)
+	// }
+	if config.Cfg.PackageDir != "" {
 		data, err := doc.GetPackageDataFromDirRecursive(config.Cfg.PackageDir)
 		if err != nil {
 			log.Fatalln((err))

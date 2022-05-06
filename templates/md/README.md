@@ -1,6 +1,10 @@
 
 # md
 
+```go
+import github.com/projectbadger/autodoc/templates/md
+```
+
 ## Index
 
 - [func ExecuteTemplate(name string, data interface{}) (string, error)](#func-executetemplate-string-data-interface--error)

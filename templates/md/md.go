@@ -5,10 +5,8 @@ import (
 	"embed"
 	"errors"
 	"fmt"
-	"io/fs"
 	"os"
 	"path/filepath"
-	"strings"
 	"text/template"
 
 	"github.com/projectbadger/autodoc/config"
@@ -47,6 +45,8 @@ var (
 	}
 )
 
+// SetupTemplates sets up the TemplateDoc *template.Template
+// variable from the template strings.
 func SetupTemplates() error {
 	var err error
 	// TemplateDoc, _ = template.New("doc.md").Funcs(templates.GetTemplateFuncMap()).
@@ -75,6 +75,8 @@ func init() {
 	}
 }
 
+// ReplaceTemplates replaces the currently set templates
+// with the ones set up by the config.
 func ReplaceTemplates() (err error) {
 	if config.Cfg.Templates.TemplatesDir == "" {
 		return nil
@@ -90,88 +92,77 @@ func ReplaceTemplates() (err error) {
 	if !dirStat.IsDir() {
 		return errors.New("not dir")
 	}
-
-	filepath.WalkDir(dirStat.Name(), func(s string, d fs.DirEntry, e error) error {
-		if e != nil {
-			fmt.Println("error (start):", e)
-			return e
-		}
-		fileName := filepath.Base(d.Name())
-		if d.IsDir() || !strings.HasSuffix(fileName, ".md") {
-			return nil
-		}
-		// fmt.Println("Processing", d.Name())
-		switch fileName {
+	files, _ := os.ReadDir(dirStat.Name())
+	for _, fName := range files {
+		switch fName.Name() {
 		case "vars.md":
-			templateVars, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			templateVars, err = os.ReadFile(filepath.Join(path, fName.Name()))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return err
 			}
 		case "constants.md":
-			templateConstants, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			templateConstants, err = os.ReadFile(filepath.Join(path, fName.Name()))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return err
 			}
 		case "example.md":
-			templateExample, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			templateExample, err = os.ReadFile(filepath.Join(path, fName.Name()))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return err
 			}
 		case "function.md":
-			templateFunction, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			templateFunction, err = os.ReadFile(filepath.Join(path, fName.Name()))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return err
 			}
 		case "type.md":
-			templateType, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			templateType, err = os.ReadFile(filepath.Join(path, fName.Name()))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return err
 			}
 		case "index.md":
-			templateIndex, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			templateIndex, err = os.ReadFile(filepath.Join(path, fName.Name()))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return err
 			}
 		case "subpackages.md":
-			templateSubpackages, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			templateSubpackages, err = os.ReadFile(filepath.Join(path, fName.Name()))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return err
 			}
 		case "overview.md":
-			templateOverview, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			templateOverview, err = os.ReadFile(filepath.Join(path, fName.Name()))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return err
 			}
 		case "mod.md":
-			templateMod, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			templateMod, err = os.ReadFile(filepath.Join(path, fName.Name()))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return err
 			}
 		case "package.md":
-			templatePackage, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			templatePackage, err = os.ReadFile(filepath.Join(path, fName.Name()))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return err
 			}
 		case "doc.md":
-			templateDoc, err = os.ReadFile(filepath.Join(path, filepath.Base(d.Name())))
+			templateDoc, err = os.ReadFile(filepath.Join(path, fName.Name()))
 			if err != nil {
 				fmt.Println("Error:", err)
 				return err
 			}
 		}
-		// fmt.Println("Replacing template with", filepath.Abs(fileName))
-		return nil
-	})
+	}
 	return SetupTemplates()
 }
 

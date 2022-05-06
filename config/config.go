@@ -63,22 +63,6 @@ func GetParsedConfig() (cfg *ConfigApp, err error) {
 		}
 		os.Exit(0)
 	}
-	// if cfg.TemplatesDir != "" {
-	// 	err = templates.ReplaceTemplates()
-	// 	if err != nil {
-	// 		fmt.Printf("Error saving to file: '%q'", err)
-	// 		os.Exit(1)
-	// 	}
-	// 	os.Exit(0)
-	// }
-	// if cfg.OutputTemplates != "" {
-	// 	err = templates.OutputTemplatesToDir(cfg.OutputTemplates)
-	// 	if err != nil {
-	// 		fmt.Printf("Error saving to file: '%q'", err)
-	// 		os.Exit(1)
-	// 	}
-	// 	os.Exit(0)
-	// }
 	return cfg, nil
 }
 
