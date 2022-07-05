@@ -32,7 +32,7 @@ run:
 	$(GO_CMD) run -ldflags="$(LDFLAGS)" $(BUILD_MAIN_FILE) $(RUN_ARGS)
 
 build-docs:
-	$(GOAUTODOC_CMD) -config ./.autodoc/config.root.yml > ./config/README.md
+	$(GOAUTODOC_CMD) -config ./.autodoc/config.root.yml > ./README.md
 	$(GOAUTODOC_CMD) -package ./config > ./config/README.md
 	$(GOAUTODOC_CMD) -package ./doc > ./doc/README.md
 	$(GOAUTODOC_CMD) -package ./templates > ./templates/README.md

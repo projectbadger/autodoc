@@ -1,4 +1,4 @@
-{{ define "function" }}## func [{{ .Name }}]({{ if .Filename }}<{{ .Filename }}{{ if .Line }}#L{{ .Line }}{{ end }}>)
+{{ define "function" }}## func [{{ methodHeading .Definition }}]({{ if .Filename }}<{{ .Filename }}{{ if .Line }}#L{{ .Line }}{{ end }}>)
 {{ end }}{{ if .Doc }}
 {{ .Doc }}
 {{ end }}

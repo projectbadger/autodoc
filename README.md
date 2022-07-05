@@ -35,9 +35,9 @@ autodoc -package . -included-data all,-types,-vars,-constants,
 
 ## Subpackages
 
-- [config](/config)
-- [doc](/doc)
-- [templates](/templates)
-- [functions](/templates/functions)
-- [md](/templates/md)
+- [config](config)
+- [doc](doc)
+- [templates](templates)
+- [functions](templates/functions)
+- [md](templates/md)
 

@@ -9,24 +9,22 @@ Documentation templates
 
 ## Index
 
-- [func OutputTemplatesToDir(path string) error](#func-outputtemplatestodir-string-error)
-- [func ReplaceTemplates() error](#func-replacetemplates-error)
-- [func SetupTemplates() error](#func-setuptemplates-error)
+- func [OutputTemplatesToDir](#func-outputtemplatestodir)
+- func [SetupTemplates](#func-setuptemplates)
 
 
-## func [OutputTemplatesToDir](<templates.go#L15>)
+## func [OutputTemplatesToDir](<templates.go#L16>)
 
-SaveToFile saves the config to a file in YAML format
+OutputTemplatesToDir creates template files in the
+specified directory
 
 ```go
 func OutputTemplatesToDir(path string) error
 ```
-## func [ReplaceTemplates](<templates.go#L49>)
+## func [SetupTemplates](<templates.go#L51>)
 
-```go
-func ReplaceTemplates() error
-```
-## func [SetupTemplates](<templates.go#L53>)
+SetupTemplates sets the templates and template overrides
+according to the config.
 
 ```go
 func SetupTemplates() error

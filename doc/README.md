@@ -7,73 +7,72 @@ import github.com/projectbadger/autodoc/doc
 
 ## Index
 
-- [doc](#doc)
-	- [Index](#index)
-	- [func AddConst](#func-addconst)
-	- [func AddExample](#func-addexample)
-	- [func AddFunc](#func-addfunc)
-	- [func AddFuncExample](#func-addfuncexample)
-	- [func AddType](#func-addtype)
-	- [func AddTypeExample](#func-addtypeexample)
-	- [func AddTypeFunc](#func-addtypefunc)
-	- [func AddTypeMethod](#func-addtypemethod)
-	- [func AddVar](#func-addvar)
-	- [func GetDirectories](#func-getdirectories)
-	- [func GetGoFiles](#func-getgofiles)
-	- [func GetGoFilesInDir](#func-getgofilesindir)
-	- [func GetPackageDocumentation](#func-getpackagedocumentation)
-	- [func GetPackagesDataFromDirRecursive](#func-getpackagesdatafromdirrecursive)
-	- [func ParseGoMod](#func-parsegomod)
-	- [func ParseGoModFile](#func-parsegomodfile)
-	- [func SeekGoMod](#func-seekgomod)
-	- [type Const](#type-const)
-	- [type Example](#type-example)
-	- [type Func](#type-func)
-	- [type Module](#type-module)
-	- [func ParseModule](#func-parsemodule)
-	- [type Package](#type-package)
-	- [func GetPackageDataFromDir](#func-getpackagedatafromdir)
-	- [func GetPackageDataFromDirRecursive](#func-getpackagedatafromdirrecursive)
-	- [func ParsePackage](#func-parsepackage)
-	- [type Type](#type-type)
-	- [type Var](#type-var)
+- func [AddConst](#func-addconst)
+- func [AddExample](#func-addexample)
+- func [AddFunc](#func-addfunc)
+- func [AddFuncExample](#func-addfuncexample)
+- func [AddType](#func-addtype)
+- func [AddTypeExample](#func-addtypeexample)
+- func [AddTypeFunc](#func-addtypefunc)
+- func [AddTypeMethod](#func-addtypemethod)
+- func [AddVar](#func-addvar)
+- func [GetDirectories](#func-getdirectories)
+- func [GetGoFiles](#func-getgofiles)
+- func [GetGoFilesInDir](#func-getgofilesindir)
+- func [GetPackageDocumentation](#func-getpackagedocumentation)
+- func [GetPackagesDataFromDirRecursive](#func-getpackagesdatafromdirrecursive)
+- func [ParseGoMod](#func-parsegomod)
+- func [ParseGoModFile](#func-parsegomodfile)
+- func [SeekGoMod](#func-seekgomod)
 
-## func [AddConst](<definitions.go#L50>)
+- [type Const](#const)
+- [type Example](#example)
+- [type Func](#func)
+- [type Module](#module)
+  - func [ParseModule](#func-parsemodule)
+- [type Package](#package)
+  - func [GetPackageDataFromDir](#func-getpackagedatafromdir)
+  - func [GetPackageDataFromDirRecursive](#func-getpackagedatafromdirrecursive)
+  - func [ParsePackage](#func-parsepackage)
+- [type Type](#type)
+- [type Var](#var)
+
+## func [AddConst](<definitions.go#L46>)
 
 ```go
 func AddConst(data *Package, node *doc.Value, path string)
 ```
-## func [AddExample](<definitions.go#L69>)
+## func [AddExample](<definitions.go#L65>)
 
 ```go
 func AddExample(data *Package, node *doc.Example, path string)
 ```
-## func [AddFunc](<definitions.go#L106>)
+## func [AddFunc](<definitions.go#L102>)
 
 ```go
 func AddFunc(data *Package, node *doc.Func, path string)
 ```
-## func [AddFuncExample](<definitions.go#L78>)
+## func [AddFuncExample](<definitions.go#L74>)
 
 ```go
 func AddFuncExample(data *Func, node *doc.Example, path string)
 ```
-## func [AddType](<definitions.go#L134>)
+## func [AddType](<definitions.go#L130>)
 
 ```go
 func AddType(data *Package, node *doc.Type, path string)
 ```
-## func [AddTypeExample](<definitions.go#L87>)
+## func [AddTypeExample](<definitions.go#L83>)
 
 ```go
 func AddTypeExample(data *Type, node *doc.Example, path string)
 ```
-## func [AddTypeFunc](<definitions.go#L157>)
+## func [AddTypeFunc](<definitions.go#L153>)
 
 ```go
 func AddTypeFunc(data *Type, node *doc.Func, path string)
 ```
-## func [AddTypeMethod](<definitions.go#L170>)
+## func [AddTypeMethod](<definitions.go#L166>)
 
 ```go
 func AddTypeMethod(data *Type, node *doc.Func, path string)
@@ -103,12 +102,12 @@ func GetGoFilesInDir(path string) []*ast.File
 ```go
 func GetPackageDocumentation(packageFilePath, packageImportPath string) (*doc.Package, error)
 ```
-## func [GetPackagesDataFromDirRecursive](<definitions.go#L362>)
+## func [GetPackagesDataFromDirRecursive](<definitions.go#L358>)
 
 ```go
 func GetPackagesDataFromDirRecursive(dirPath string, includeRoot bool, rootImportPath string) (map[string]*Package, error)
 ```
-## func [ParseGoMod](<definitions.go#L398>)
+## func [ParseGoMod](<definitions.go#L394>)
 
 ```go
 func ParseGoMod(pkg *Package, path string) error
@@ -118,14 +117,14 @@ func ParseGoMod(pkg *Package, path string) error
 ```go
 func ParseGoModFile(module *Module, path string) error
 ```
-## func [SeekGoMod](<definitions.go#L420>)
+## func [SeekGoMod](<definitions.go#L416>)
 
 ```go
 func SeekGoMod(pkg *Package, path string, levels int) error
 ```
 
 
-## type [Const](<definitions.go#L42>)
+## type [Const](<definitions.go#L38>)
 ```go
 type Const struct {
 	Name		string
@@ -136,7 +135,7 @@ type Const struct {
 }
 ```
 
-## type [Example](<definitions.go#L63>)
+## type [Example](<definitions.go#L59>)
 ```go
 type Example struct {
 	Name		string
@@ -145,7 +144,7 @@ type Example struct {
 }
 ```
 
-## type [Func](<definitions.go#L97>)
+## type [Func](<definitions.go#L93>)
 ```go
 type Func struct {
 	Name		string
@@ -175,7 +174,7 @@ type Module struct {
 func ParseModule(path string) (*Module, error)
 ```
 
-## type [Package](<definitions.go#L183>)
+## type [Package](<definitions.go#L179>)
 ```go
 type Package struct {
 	ImportPath	string
@@ -205,23 +204,23 @@ type Package struct {
 }
 ```
 
-## func [GetPackageDataFromDir](<definitions.go#L353>)
+## func [GetPackageDataFromDir](<definitions.go#L349>)
 
 ```go
 func GetPackageDataFromDir(path string) (*Package, error)
 ```
-## func [GetPackageDataFromDirRecursive](<definitions.go#L342>)
+## func [GetPackageDataFromDirRecursive](<definitions.go#L338>)
 
 ```go
 func GetPackageDataFromDirRecursive(path string) (*Package, error)
 ```
-## func [ParsePackage](<definitions.go#L244>)
+## func [ParsePackage](<definitions.go#L240>)
 
 ```go
 func ParsePackage(docs *doc.Package, path string) (*Package, error)
 ```
 
-## type [Type](<definitions.go#L123>)
+## type [Type](<definitions.go#L119>)
 ```go
 type Type struct {
 	Name		string
