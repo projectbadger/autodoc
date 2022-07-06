@@ -13,7 +13,33 @@ import (
 	"github.com/projectbadger/autodoc/templates/functions"
 )
 
+type templateName string
+
+func (t *templateName) Name() string {
+	if t == nil {
+		return ""
+	}
+	return string(*t)
+}
+
+type embeddedTemplate struct {
+	Name    string
+	Content []byte
+}
+
+type EmbeddedTemplates struct {
+	Mod         embeddedTemplate
+	Subpackages embeddedTemplate
+}
+
 var (
+	Templates = []embeddedTemplate{
+		{
+			Name: "mod.md",
+			//go:embed mod.md
+			Content: []byte{},
+		},
+	}
 	//go:embed mod.md
 	templateMod []byte
 	//go:embed subpackages.md
@@ -26,6 +52,10 @@ var (
 	templateIndex []byte
 	//go:embed type.md
 	templateType []byte
+	//go:embed functionDefinition.md
+	templateFunctionDefinition []byte
+	//go:embed functionHeading.md
+	templateFunctionHeading []byte
 	//go:embed function.md
 	templateFunction []byte
 	//go:embed example.md
@@ -39,9 +69,10 @@ var (
 	//go:embed vars.md constants.md example.md function.md type.md index.md package.md doc.md
 	TemplatesFS   embed.FS
 	TemplateDoc   *template.Template
-	TemplateNames = []string{
-		"doc.md", "example.md", "function.md", "index.md",
-		"type.md", "package.md", "vars.md", "constants.md",
+	TemplateNames = []templateName{
+		"vars.md",
+		"constants.md",
+		"example.md", "functionDefinition.md", "functionHeading.md", "function.md", "type.md", "index.md", "subpackages.md", "overview.md", "package.md", "doc.md", "mod.md",
 	}
 )
 
@@ -49,14 +80,14 @@ var (
 // variable from the template strings.
 func SetupTemplates() error {
 	var err error
-	// TemplateDoc, _ = template.New("doc.md").Funcs(templates.GetTemplateFuncMap()).
-	// TemplateDoc, err = template.New("doc.md").Funcs(templates.GetTemplateFuncMap()).ParseFS(TemplatesFS, TemplateNames...)
 	TemplateDoc = template.New("doc.md").
 		Funcs(functions.GetTemplateFuncMap())
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateOverview)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateConstants)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateVars)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateExample)))
+	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateFunctionDefinition)))
+	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateFunctionHeading)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateFunction)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateType)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateIndex)))
@@ -94,72 +125,14 @@ func ReplaceTemplates() (err error) {
 	}
 	files, _ := os.ReadDir(dirStat.Name())
 	for _, fName := range files {
-		switch fName.Name() {
-		case "vars.md":
-			templateVars, err = os.ReadFile(filepath.Join(path, fName.Name()))
-			if err != nil {
-				fmt.Println("Error:", err)
-				return err
-			}
-		case "constants.md":
-			templateConstants, err = os.ReadFile(filepath.Join(path, fName.Name()))
-			if err != nil {
-				fmt.Println("Error:", err)
-				return err
-			}
-		case "example.md":
-			templateExample, err = os.ReadFile(filepath.Join(path, fName.Name()))
-			if err != nil {
-				fmt.Println("Error:", err)
-				return err
-			}
-		case "function.md":
-			templateFunction, err = os.ReadFile(filepath.Join(path, fName.Name()))
-			if err != nil {
-				fmt.Println("Error:", err)
-				return err
-			}
-		case "type.md":
-			templateType, err = os.ReadFile(filepath.Join(path, fName.Name()))
-			if err != nil {
-				fmt.Println("Error:", err)
-				return err
-			}
-		case "index.md":
-			templateIndex, err = os.ReadFile(filepath.Join(path, fName.Name()))
-			if err != nil {
-				fmt.Println("Error:", err)
-				return err
-			}
-		case "subpackages.md":
-			templateSubpackages, err = os.ReadFile(filepath.Join(path, fName.Name()))
-			if err != nil {
-				fmt.Println("Error:", err)
-				return err
-			}
-		case "overview.md":
-			templateOverview, err = os.ReadFile(filepath.Join(path, fName.Name()))
-			if err != nil {
-				fmt.Println("Error:", err)
-				return err
-			}
-		case "mod.md":
-			templateMod, err = os.ReadFile(filepath.Join(path, fName.Name()))
-			if err != nil {
-				fmt.Println("Error:", err)
-				return err
-			}
-		case "package.md":
-			templatePackage, err = os.ReadFile(filepath.Join(path, fName.Name()))
-			if err != nil {
-				fmt.Println("Error:", err)
-				return err
-			}
-		case "doc.md":
-			templateDoc, err = os.ReadFile(filepath.Join(path, fName.Name()))
-			if err != nil {
-				fmt.Println("Error:", err)
-				return err
+		for _, templateName := range TemplateNames {
+			if fName.Name() == templateName.Name() {
+				templateVars, err = os.ReadFile(filepath.Join(path, fName.Name()))
+				if err != nil {
+					fmt.Println("Error:", err)
+					return err
+				}
+				break
 			}
 		}
 	}
@@ -172,7 +145,7 @@ func GetTemplatesBytes() (t [][]byte) {
 		return nil
 	}
 	for _, name := range TemplateNames {
-		f, err := TemplatesFS.ReadFile(name)
+		f, err := TemplatesFS.ReadFile(name.Name())
 		if err != nil {
 			return nil
 		}
@@ -201,7 +174,7 @@ func OutputTemplatesToDir(path string) error {
 	}
 	files := GetTemplatesBytes()
 	for i, templateName := range TemplateNames {
-		err := os.WriteFile(filepath.Join(path, templateName), files[i], 0664)
+		err := os.WriteFile(filepath.Join(path, templateName.Name()), files[i], 0664)
 		if err != nil {
 			return err
 		}

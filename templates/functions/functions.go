@@ -24,6 +24,17 @@ func toMDHeadingHREFGit(importPath, heading string) string {
 	return filepath.Join(importPath, config.Cfg.Templates.GetLinkPrefix(), headingMDLinkRegex.ReplaceAllLiteralString(heading, ""))
 }
 
+var (
+	regexMatchFunctionName = regexp.MustCompile(`func\s?(\([\w*\s]+\))?\s?(\w+)\([\w*\s]+\)\s?(\([\w*\s,]+\)|[\w*\s]+)?`)
+)
+
+func formatFuncDefinitionToHeading(definition string) string {
+	// Can be a function or a method
+	// func (c *Struct) Function(param type) return
+
+	return ""
+}
+
 // GetTemplateFuncMap returns the template function map
 func GetTemplateFuncMap() template.FuncMap {
 	return template.FuncMap{

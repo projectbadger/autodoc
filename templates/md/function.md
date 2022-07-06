@@ -1,5 +1,4 @@
-{{ define "function" }}## func [{{ .Name }}]({{ if .Filename }}<{{ .Filename }}{{ if .Line }}#L{{ .Line }}{{ end }}>)
-{{ end }}{{ if .Doc }}
+{{ define "function" }}{{ template "functionHeading" . }}{{ if .Doc }}
 {{ .Doc }}
 {{ end }}
 ```go
@@ -7,4 +6,5 @@
 ```
 {{ if .Examples }}
 {{ range .Examples }}{{ template "example" . }}{{ end }}
-{{- end }}{{- end }}
+{{- end }}
+{{- end }}

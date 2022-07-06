@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
+	"fmt"
+	"go/ast"
 	"go/doc"
 	"go/printer"
 	"os"
@@ -12,6 +14,7 @@ import (
 	"strings"
 
 	"github.com/projectbadger/autodoc/config"
+	"github.com/projectbadger/autodoc/templates/md"
 )
 
 type Var struct {
@@ -93,19 +96,158 @@ func AddTypeExample(data *Type, node *doc.Example, path string) {
 type Func struct {
 	Name       string
 	Definition string
+	Recv       FuncVar
+	Params     []FuncVar
+	Results    []FuncVar
 	Doc        string
 	Examples   []*Example
 	Filename   string
 	Line       int
 }
 
+type FuncVar struct {
+	Name string
+	Type string
+}
+
+func (f *Func) FormatParams() string {
+	str := ""
+	noTypeCount := 0
+	for _, param := range f.Params {
+		if param.Type != "" {
+			str += param.Type + ", "
+			if noTypeCount > 0 {
+				for ; noTypeCount > 0; noTypeCount-- {
+					str += param.Type + ", "
+				}
+			}
+			continue
+		}
+		noTypeCount++
+	}
+	return strings.TrimRight(str, ", ")
+}
+
+func (f *Func) FormatParamsBrackets() string {
+	return "(" + f.FormatResults() + ")"
+}
+
+func (f *Func) FormatResults() string {
+	str := ""
+	if len(f.Results) == 1 {
+		return f.Results[0].Type
+	}
+	noTypeCount := 0
+	for _, result := range f.Results {
+		if result.Type != "" {
+			str += result.Type + ", "
+			if noTypeCount > 0 {
+				for ; noTypeCount > 0; noTypeCount-- {
+					str += result.Type + ", "
+				}
+			}
+			continue
+		}
+		noTypeCount++
+	}
+	return strings.TrimRight(str, ", ")
+}
+
+func (f *Func) FormatResultsBrackets() string {
+	if len(f.Results) < 2 {
+		return f.FormatResults()
+	}
+	return "(" + f.FormatResults() + ")"
+}
+
+var matchChars = regexp.MustCompile(`[^a-z0-9-/]+|-+`)
+var matchFuncDefinition = regexp.MustCompile(`func \[(.+)\]\(`)
+
+func (f *Func) GetHeadingHREF() string {
+	var b bytes.Buffer
+	err := md.TemplateDoc.ExecuteTemplate(&b, "functionHeading", f)
+	if err != nil {
+		return err.Error()
+	}
+	str := strings.ToLower(b.String())
+	fName := matchFuncDefinition.FindStringSubmatch(str)
+	if fName == nil {
+		return ""
+	}
+
+	return strings.Trim(matchChars.ReplaceAllLiteralString(fName[0], "-"), "-")
+}
+
 func AddFunc(data *Package, node *doc.Func, path string) {
 	var buf = bytes.NewBuffer(nil)
 	printer.Fprint(buf, filesets[path], node.Decl)
 	position := filesets[path].Position(node.Decl.Pos())
+	fmt.Printf("func node: '%#v'\n", node)
+	var params []FuncVar
+	for _, val := range node.Decl.Type.Params.List {
+		var funcVar FuncVar
+		var typeName string
+		if se, ok := val.Type.(*ast.SelectorExpr); ok {
+			typeName = se.Sel.Name
+		}
+		if ident, ok := val.Type.(*ast.Ident); ok {
+			typeName = ident.Name
+		}
+		if val.Names != nil {
+			for _, name := range val.Names {
+				funcVar.Name = name.Name
+				params = append(params, FuncVar{
+					Type: typeName,
+					Name: name.Name,
+				})
+			}
+			continue
+		}
+		params = append(params, FuncVar{
+			Type: typeName,
+			Name: "",
+		})
+	}
+	var results []FuncVar
+	if node.Decl.Type.Results != nil && node.Decl.Type.Results.List != nil {
+		for _, val := range node.Decl.Type.Results.List {
+			var funcVar FuncVar
+			var typeName string
+			if se, ok := val.Type.(*ast.SelectorExpr); ok {
+				typeName = se.Sel.Name
+			}
+			if ident, ok := val.Type.(*ast.Ident); ok {
+				typeName = ident.Name
+			}
+			if val.Names != nil {
+				for _, name := range val.Names {
+					funcVar.Name = name.Name
+					results = append(results, FuncVar{
+						Type: typeName,
+						Name: name.Name,
+					})
+				}
+				continue
+			}
+			results = append(results, FuncVar{
+				Type: typeName,
+				Name: "",
+			})
+		}
+	}
+	var recv FuncVar
+	if node.Decl.Recv != nil && node.Decl.Recv.List != nil {
+		recv.Type = node.Decl.Recv.List[0].Type.(*ast.Ident).Name
+		if node.Decl.Recv.List[0].Names != nil {
+			recv.Name = node.Decl.Recv.List[0].Names[0].Name
+		}
+	}
 	f := &Func{
-		Name:       node.Name,
+		Name:       node.Decl.Name.Name,
 		Doc:        parseComment(0, node.Doc),
+		Params:     params,
+		Results:    results,
+		Recv:       recv,
 		Definition: buf.String(),
 		Line:       position.Line,
 		Filename:   filepath.Base(position.Filename),

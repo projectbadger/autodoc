@@ -38,7 +38,7 @@ func OutputTemplatesToDir(path string) error {
 	}
 	files := md.GetTemplatesBytes()
 	for i, templateName := range md.TemplateNames {
-		err := os.WriteFile(filepath.Join(path, templateName), files[i], 0664)
+		err := os.WriteFile(filepath.Join(path, templateName.Name()), files[i], 0664)
 		if err != nil {
 			return err
 		}
