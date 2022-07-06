@@ -59,7 +59,6 @@ func SetupTemplates() error {
 		os.Exit(0)
 	}
 	if config.Cfg.Templates.TemplatesDir != "" {
-		// fmt.Printf("Parsing templates from '%s'\n", config.Cfg.TemplatesDir)
 		err := md.ReplaceTemplates()
 		if err != nil {
 			fmt.Printf("Error saving to file: '%q'", err)

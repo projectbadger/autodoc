@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
-	"fmt"
 	"go/ast"
 	"go/doc"
 	"go/printer"
@@ -163,26 +162,25 @@ func (f *Func) FormatResultsBrackets() string {
 var matchChars = regexp.MustCompile(`[^a-z0-9-/]+|-+`)
 var matchFuncDefinition = regexp.MustCompile(`func \[(.+)\]\(`)
 
+func getHeadingHREF(str string) string {
+	str = strings.ToLower(str)
+	return strings.Trim(matchChars.ReplaceAllLiteralString(str, "-"), "-")
+}
+
 func (f *Func) GetHeadingHREF() string {
 	var b bytes.Buffer
 	err := md.TemplateDoc.ExecuteTemplate(&b, "functionHeading", f)
 	if err != nil {
 		return err.Error()
 	}
-	str := strings.ToLower(b.String())
-	fName := matchFuncDefinition.FindStringSubmatch(str)
-	if fName == nil {
-		return ""
-	}
-
-	return strings.Trim(matchChars.ReplaceAllLiteralString(fName[0], "-"), "-")
+	def := matchFuncDefinition.FindStringSubmatch(b.String())
+	return getHeadingHREF(def[0])
 }
 
 func AddFunc(data *Package, node *doc.Func, path string) {
 	var buf = bytes.NewBuffer(nil)
 	printer.Fprint(buf, filesets[path], node.Decl)
 	position := filesets[path].Position(node.Decl.Pos())
-	fmt.Printf("func node: '%#v'\n", node)
 	var params []FuncVar
 	for _, val := range node.Decl.Type.Params.List {
 		var funcVar FuncVar
@@ -267,6 +265,10 @@ type Type struct {
 	Funcs      []*Func
 	Filename   string
 	Line       int
+}
+
+func (t *Type) GetHeadingHREF() string {
+	return getHeadingHREF("type " + t.Name)
 }
 
 func AddType(data *Package, node *doc.Type, path string) {
@@ -390,13 +392,9 @@ func ParsePackage(docs *doc.Package, path string) (*Package, error) {
 	}
 	if docs.ImportPath != "" {
 		p.ImportPath = docs.ImportPath
-		// fmt.Println("Import:", docs.ImportPath)
 	} else {
 		SeekGoMod(p, path, 3)
-		// fmt.Println("parsed import:", p.ImportPath)
 	}
-	// fmt.Println("p.Doc:", p.Doc)
-	// fmt.Println("docs.ImportPath:", docs.ImportPath)
 	for _, val := range docs.Examples {
 		AddExample(p, val, path)
 	}
@@ -493,7 +491,6 @@ func GetPackageDataFromDir(path string) (*Package, error) {
 	if err != nil {
 		return nil, err
 	}
-	// fmt.Println("got package", docs.Name, "from path", path)
 	return ParsePackage(docs, path)
 }
 
@@ -527,9 +524,6 @@ func GetPackagesDataFromDirRecursive(dirPath string, includeRoot bool, rootImpor
 		}
 		return nil
 	})
-	// for p, val := range packages {
-	// 	fmt.Println("Package", val.Name, "from", p)
-	// }
 	return packages, nil
 }
 

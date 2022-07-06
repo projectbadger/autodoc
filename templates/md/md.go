@@ -10,7 +10,6 @@ import (
 	"text/template"
 
 	"github.com/projectbadger/autodoc/config"
-	"github.com/projectbadger/autodoc/templates/functions"
 )
 
 type templateName string
@@ -80,8 +79,7 @@ var (
 // variable from the template strings.
 func SetupTemplates() error {
 	var err error
-	TemplateDoc = template.New("doc.md").
-		Funcs(functions.GetTemplateFuncMap())
+	TemplateDoc = template.New("doc.md")
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateOverview)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateConstants)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateVars)))

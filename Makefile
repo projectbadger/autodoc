@@ -36,7 +36,6 @@ build-docs:
 	$(GOAUTODOC_CMD) -package ./config > ./config/README.md
 	$(GOAUTODOC_CMD) -package ./doc > ./doc/README.md
 	$(GOAUTODOC_CMD) -package ./templates > ./templates/README.md
-	$(GOAUTODOC_CMD) -package ./templates/functions > ./templates/functions/README.md
 	$(GOAUTODOC_CMD) -package ./templates/md > ./templates/md/README.md
 
 show-info:

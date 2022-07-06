@@ -112,7 +112,6 @@ func GetPackageDocumentation(packageFilePath, packageImportPath string) (*doc.Pa
 		filesets[packageFilePath] = token.NewFileSet()
 	}
 	files := GetGoFilesInDir(packageFilePath)
-	// fmt.Printf("Got files: '%#v', files, from %s", files, packageFilePath)
 	return doc.NewFromFiles(filesets[packageFilePath], files, packageImportPath)
 }
 

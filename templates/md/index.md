@@ -2,7 +2,7 @@
 - [{{ template "functionDefinition" . }}](#{{ .GetHeadingHREF}})
 {{- end }}
 {{ end }}{{- end }}{{ if .ShowTypes }}{{ if .Types }}{{ range .Types }}
-- [type {{ .Name }}](#{{ headingLink .Name}}){{ if .Funcs }}{{ range .Funcs }}
+- [type {{ .Name }}](#{{ .GetHeadingHREF }}){{ if .Funcs }}{{ range .Funcs }}
   - [{{ template "functionDefinition" . }}](#{{ .GetHeadingHREF}})
 {{- end }}{{ end }}{{ if .Methods }}{{ range .Methods }}
   - [{{ template "functionDefinition" . }}](#{{ .GetHeadingHREF}})
