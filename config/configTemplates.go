@@ -10,6 +10,10 @@ type ConfigTemplates struct {
 	ImportPath       string   `default:"" json:"import_path" yaml:"import_path" cli:"import-path Package import path. Will be parsed as a git server repository URL for links in the documentation.\n      "`
 }
 
+func (c *ConfigTemplates) Copy(cfg *ConfigTemplates) (error, *ConfigTemplates) {
+	return nil, cfg
+}
+
 // SetupDefault sets the default data
 func (c *ConfigTemplates) SetupDefault() {
 	// c.ImportPath = "git.example.com/project/repository"

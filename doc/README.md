@@ -16,11 +16,11 @@ import github.com/projectbadger/autodoc/doc
 - [AddTypeFunc(string, string, string)](#func-addtypefunc-string-string-string)
 - [AddTypeMethod(string, string, string)](#func-addtypemethod-string-string-string)
 - [AddVar(string, string, string)](#func-addvar-string-string-string)
-- [GetDirectories(string) ](#func-getdirectories-string)
-- [GetGoFiles(string) ](#func-getgofiles-string)
-- [GetGoFilesInDir(string) ](#func-getgofilesindir-string)
-- [GetPackageDocumentation(string, string) (error, error)](#func-getpackagedocumentation-string-string-error-error)
-- [GetPackagesDataFromDirRecursive(string, bool, string) (error, error)](#func-getpackagesdatafromdirrecursive-string-bool-string-error-error)
+- [GetDirectories(string)](#func-getdirectories-string)
+- [GetGoFiles(string)](#func-getgofiles-string)
+- [GetGoFilesInDir(string)](#func-getgofilesindir-string)
+- [GetPackageDocumentation(string, string) error](#func-getpackagedocumentation-string-string-error)
+- [GetPackagesDataFromDirRecursive(string, bool, string) error](#func-getpackagesdatafromdirrecursive-string-bool-string-error)
 - [ParseGoMod(string, string) error](#func-parsegomod-string-string-error)
 - [ParseGoModFile(string, string) error](#func-parsegomodfile-string-string-error)
 - [SeekGoMod(string, string, int) error](#func-seekgomod-string-string-int-error)
@@ -28,87 +28,105 @@ import github.com/projectbadger/autodoc/doc
 - [type Const](#type-const)
 - [type Example](#type-example)
 - [type Func](#type-func)
-  - [FormatParams()](#func-formatparams)
-  - [FormatParamsBrackets()](#func-formatparamsbrackets)
-  - [FormatResults()](#func-formatresults)
-  - [FormatResultsBrackets()](#func-formatresultsbrackets)
-  - [GetHeadingHREF()](#func-getheadinghref)
+  - [NewFunc(string, string) Func](#func-newfunc-string-string-func)
+  - [FormatParams() string](#func-func-formatparams-string)
+  - [FormatParamsBrackets() string](#func-func-formatparamsbrackets-string)
+  - [FormatResults() string](#func-func-formatresults-string)
+  - [FormatResultsBrackets() string](#func-func-formatresultsbrackets-string)
+  - [GetHeadingHREF() string](#func-func-getheadinghref-string)
 - [type FuncVar](#type-funcvar)
 - [type Module](#type-module)
-  - [ParseModule()](#func-parsemodule)
+  - [ParseModule(string) (Module, error)](#func-parsemodule-string-module-error)
 - [type Package](#type-package)
-  - [GetPackageDataFromDir()](#func-getpackagedatafromdir)
-  - [GetPackageDataFromDirRecursive()](#func-getpackagedatafromdirrecursive)
-  - [ParsePackage()](#func-parsepackage)
+  - [GetPackageDataFromDir(string) (Package, error)](#func-getpackagedatafromdir-string-package-error)
+  - [GetPackageDataFromDirRecursive(string) (Package, error)](#func-getpackagedatafromdirrecursive-string-package-error)
+  - [ParsePackage(string, string) (Package, error)](#func-parsepackage-string-string-package-error)
 - [type Type](#type-type)
-  - [GetHeadingHREF()](#func-getheadinghref)
+  - [GetHeadingHREF() string](#func-type-getheadinghref-string)
 - [type Var](#type-var)
 
 ## func [AddConst(string, string, string)](<definitions.go#L48>)
+
 ```go
 func AddConst(data *Package, node *doc.Value, path string)
 ```
 ## func [AddExample(string, string, string)](<definitions.go#L67>)
+
 ```go
 func AddExample(data *Package, node *doc.Example, path string)
 ```
-## func [AddFunc(string, string, string)](<definitions.go#L180>)
+## func [AddFunc(string, string, string)](<definitions.go#L298>)
+
 ```go
 func AddFunc(data *Package, node *doc.Func, path string)
 ```
 ## func [AddFuncExample(string, string, string)](<definitions.go#L76>)
+
 ```go
 func AddFuncExample(data *Func, node *doc.Example, path string)
 ```
-## func [AddType(string, string, string)](<definitions.go#L274>)
+## func [AddType(string, string, string)](<definitions.go#L324>)
+
 ```go
 func AddType(data *Package, node *doc.Type, path string)
 ```
 ## func [AddTypeExample(string, string, string)](<definitions.go#L85>)
+
 ```go
 func AddTypeExample(data *Type, node *doc.Example, path string)
 ```
-## func [AddTypeFunc(string, string, string)](<definitions.go#L297>)
+## func [AddTypeFunc(string, string, string)](<definitions.go#L347>)
+
 ```go
 func AddTypeFunc(data *Type, node *doc.Func, path string)
 ```
-## func [AddTypeMethod(string, string, string)](<definitions.go#L310>)
+## func [AddTypeMethod(string, string, string)](<definitions.go#L354>)
+
 ```go
 func AddTypeMethod(data *Type, node *doc.Func, path string)
 ```
 ## func [AddVar(string, string, string)](<definitions.go#L27>)
+
 ```go
 func AddVar(data *Package, node *doc.Value, path string)
 ```
-## func [GetDirectories(string) ](<doc.go#L87>)
+## func [GetDirectories(string)](<doc.go#L87>)
+
 ```go
 func GetDirectories(path string) []string
 ```
-## func [GetGoFiles(string) ](<doc.go#L21>)
+## func [GetGoFiles(string)](<doc.go#L21>)
+
 ```go
 func GetGoFiles(path string) []*ast.File
 ```
-## func [GetGoFilesInDir(string) ](<doc.go#L51>)
+## func [GetGoFilesInDir(string)](<doc.go#L51>)
+
 ```go
 func GetGoFilesInDir(path string) []*ast.File
 ```
-## func [GetPackageDocumentation(string, string) (error, error)](<doc.go#L109>)
+## func [GetPackageDocumentation(string, string) error](<doc.go#L109>)
+
 ```go
 func GetPackageDocumentation(packageFilePath, packageImportPath string) (*doc.Package, error)
 ```
-## func [GetPackagesDataFromDirRecursive(string, bool, string) (error, error)](<definitions.go#L497>)
+## func [GetPackagesDataFromDirRecursive(string, bool, string) error](<definitions.go#L533>)
+
 ```go
 func GetPackagesDataFromDirRecursive(dirPath string, includeRoot bool, rootImportPath string) (map[string]*Package, error)
 ```
-## func [ParseGoMod(string, string) error](<definitions.go#L530>)
+## func [ParseGoMod(string, string) error](<definitions.go#L566>)
+
 ```go
 func ParseGoMod(pkg *Package, path string) error
 ```
 ## func [ParseGoModFile(string, string) error](<module.go#L33>)
+
 ```go
 func ParseGoModFile(module *Module, path string) error
 ```
-## func [SeekGoMod(string, string, int) error](<definitions.go#L552>)
+## func [SeekGoMod(string, string, int) error](<definitions.go#L588>)
+
 ```go
 func SeekGoMod(pkg *Package, path string, levels int) error
 ```
@@ -149,23 +167,34 @@ type Func struct {
 }
 ```
 
-## func [FormatParams()](<definitions.go#L112>)
+## func [NewFunc(string, string) Func](<definitions.go#L182>)
+
+```go
+func NewFunc(node *doc.Func, path string) *Func
+```
+
+## func (*Func) [FormatParams() string](<definitions.go#L113>)
+
 ```go
 func (f *Func) FormatParams() string
 ```
-## func [FormatParamsBrackets()](<definitions.go#L130>)
+## func (*Func) [FormatParamsBrackets() string](<definitions.go#L131>)
+
 ```go
 func (f *Func) FormatParamsBrackets() string
 ```
-## func [FormatResults()](<definitions.go#L134>)
+## func (*Func) [FormatResults() string](<definitions.go#L135>)
+
 ```go
 func (f *Func) FormatResults() string
 ```
-## func [FormatResultsBrackets()](<definitions.go#L155>)
+## func (*Func) [FormatResultsBrackets() string](<definitions.go#L156>)
+
 ```go
 func (f *Func) FormatResultsBrackets() string
 ```
-## func [GetHeadingHREF()](<definitions.go#L170>)
+## func (*Func) [GetHeadingHREF() string](<definitions.go#L172>)
+
 ```go
 func (f *Func) GetHeadingHREF() string
 ```
@@ -175,6 +204,7 @@ func (f *Func) GetHeadingHREF() string
 type FuncVar struct {
 	Name	string
 	Type	string
+	Pointer	bool
 }
 ```
 
@@ -190,12 +220,13 @@ type Module struct {
 }
 ```
 
-## func [ParseModule()](<module.go#L19>)
+## func [ParseModule(string) (Module, error)](<module.go#L19>)
+
 ```go
 func ParseModule(path string) (*Module, error)
 ```
 
-## type [Package](<definitions.go#L323>)
+## type [Package](<definitions.go#L359>)
 ```go
 type Package struct {
 	ImportPath	string
@@ -225,20 +256,23 @@ type Package struct {
 }
 ```
 
-## func [GetPackageDataFromDir()](<definitions.go#L489>)
+## func [GetPackageDataFromDir(string) (Package, error)](<definitions.go#L525>)
+
 ```go
 func GetPackageDataFromDir(path string) (*Package, error)
 ```
-## func [GetPackageDataFromDirRecursive()](<definitions.go#L478>)
+## func [GetPackageDataFromDirRecursive(string) (Package, error)](<definitions.go#L514>)
+
 ```go
 func GetPackageDataFromDirRecursive(path string) (*Package, error)
 ```
-## func [ParsePackage()](<definitions.go#L384>)
+## func [ParsePackage(string, string) (Package, error)](<definitions.go#L420>)
+
 ```go
 func ParsePackage(docs *doc.Package, path string) (*Package, error)
 ```
 
-## type [Type](<definitions.go#L259>)
+## type [Type](<definitions.go#L303>)
 ```go
 type Type struct {
 	Name		string
@@ -252,7 +286,8 @@ type Type struct {
 }
 ```
 
-## func [GetHeadingHREF()](<definitions.go#L270>)
+## func (*Type) [GetHeadingHREF() string](<definitions.go#L314>)
+
 ```go
 func (t *Type) GetHeadingHREF() string
 ```

@@ -49,6 +49,8 @@ var (
 	templatePackage []byte
 	//go:embed index.md
 	templateIndex []byte
+	//go:embed typeHeading.md
+	templateTypeHeading []byte
 	//go:embed type.md
 	templateType []byte
 	//go:embed functionDefinition.md
@@ -71,7 +73,18 @@ var (
 	TemplateNames = []templateName{
 		"vars.md",
 		"constants.md",
-		"example.md", "functionDefinition.md", "functionHeading.md", "function.md", "type.md", "index.md", "subpackages.md", "overview.md", "package.md", "doc.md", "mod.md",
+		"example.md",
+		"functionDefinition.md",
+		"functionHeading.md",
+		"function.md",
+		"typeHeading",
+		"type.md",
+		"index.md",
+		"subpackages.md",
+		"overview.md",
+		"package.md",
+		"doc.md",
+		"mod.md",
 	}
 )
 
@@ -87,6 +100,7 @@ func SetupTemplates() error {
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateFunctionDefinition)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateFunctionHeading)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateFunction)))
+	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateTypeHeading)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateType)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templateIndex)))
 	TemplateDoc = template.Must(TemplateDoc.Parse(string(templatePackage)))

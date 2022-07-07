@@ -142,12 +142,13 @@ func parseComment(format uint, comment string) string {
 			}
 			buf.WriteString("```go\n")
 			buf.WriteString(strings.TrimPrefix(line, codeIndentPrefix))
+			buf.WriteString("\n")
 		} else if !isCode && isCodePrev {
 			// Code end
 			buf.WriteString(strings.TrimPrefix(line, codeIndentPrefix))
 			buf.WriteString("\n```\n")
 		} else {
-			buf.WriteString(line)
+			buf.WriteString(strings.TrimPrefix(line, codeIndentPrefix))
 			buf.WriteString("\n")
 		}
 	}

@@ -1,1 +1,1 @@
-{{ define "functionHeading" }}## func [{{ template "functionDefinition" . }}]({{ if .Filename }}<{{ .Filename }}{{ if .Line }}#L{{ .Line }}{{ end }}>){{ end }}{{- end }}
+{{ define "functionHeading" }}## func {{ if .Recv.Type }}({{ if .Recv.Pointer }}*{{ end }}{{ .Recv.Type }}) {{ end }}[{{ template "functionDefinition" . }}]({{ if .Filename }}<{{ .Filename }}{{ if .Line }}#L{{ .Line }}{{ end }}>){{ end }}{{- end }}

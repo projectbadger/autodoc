@@ -105,8 +105,9 @@ type Func struct {
 }
 
 type FuncVar struct {
-	Name string
-	Type string
+	Name    string
+	Type    string
+	Pointer bool
 }
 
 func (f *Func) FormatParams() string {
@@ -160,7 +161,8 @@ func (f *Func) FormatResultsBrackets() string {
 }
 
 var matchChars = regexp.MustCompile(`[^a-z0-9-/]+|-+`)
-var matchFuncDefinition = regexp.MustCompile(`func \[(.+)\]\(`)
+var matchFuncDefinition = regexp.MustCompile(`func\s*(\([\w\s*]+\))?\s*\[(.+)\]\(`)
+var matchTypeDefinition = regexp.MustCompile(`type\s*\[(.+)\]\(`)
 
 func getHeadingHREF(str string) string {
 	str = strings.ToLower(str)
@@ -177,7 +179,7 @@ func (f *Func) GetHeadingHREF() string {
 	return getHeadingHREF(def[0])
 }
 
-func AddFunc(data *Package, node *doc.Func, path string) {
+func NewFunc(node *doc.Func, path string) *Func {
 	var buf = bytes.NewBuffer(nil)
 	printer.Fprint(buf, filesets[path], node.Decl)
 	position := filesets[path].Position(node.Decl.Pos())
@@ -185,6 +187,7 @@ func AddFunc(data *Package, node *doc.Func, path string) {
 	for _, val := range node.Decl.Type.Params.List {
 		var funcVar FuncVar
 		var typeName string
+		var isPointer bool
 		if se, ok := val.Type.(*ast.SelectorExpr); ok {
 			typeName = se.Sel.Name
 		}
@@ -195,15 +198,17 @@ func AddFunc(data *Package, node *doc.Func, path string) {
 			for _, name := range val.Names {
 				funcVar.Name = name.Name
 				params = append(params, FuncVar{
-					Type: typeName,
-					Name: name.Name,
+					Type:    typeName,
+					Name:    name.Name,
+					Pointer: isPointer,
 				})
 			}
 			continue
 		}
 		params = append(params, FuncVar{
-			Type: typeName,
-			Name: "",
+			Type:    typeName,
+			Name:    "",
+			Pointer: isPointer,
 		})
 	}
 	var results []FuncVar
@@ -211,31 +216,65 @@ func AddFunc(data *Package, node *doc.Func, path string) {
 		for _, val := range node.Decl.Type.Results.List {
 			var funcVar FuncVar
 			var typeName string
+			var isPointer bool
 			if se, ok := val.Type.(*ast.SelectorExpr); ok {
-				typeName = se.Sel.Name
+				if ident, ok := se.X.(*ast.Ident); ok {
+					typeName = ident.Name
+					isPointer = true
+				}
+			}
+			if se, ok := val.Type.(*ast.StarExpr); ok {
+				if ident, ok := se.X.(*ast.Ident); ok {
+					typeName = ident.Name
+					isPointer = true
+				}
 			}
 			if ident, ok := val.Type.(*ast.Ident); ok {
 				typeName = ident.Name
+			}
+			if typeName == "" {
+				continue
 			}
 			if val.Names != nil {
 				for _, name := range val.Names {
 					funcVar.Name = name.Name
 					results = append(results, FuncVar{
-						Type: typeName,
-						Name: name.Name,
+						Type:    typeName,
+						Name:    name.Name,
+						Pointer: isPointer,
 					})
 				}
 				continue
 			}
 			results = append(results, FuncVar{
-				Type: typeName,
-				Name: "",
+				Type:    typeName,
+				Name:    "",
+				Pointer: isPointer,
 			})
 		}
 	}
 	var recv FuncVar
 	if node.Decl.Recv != nil && node.Decl.Recv.List != nil {
-		recv.Type = node.Decl.Recv.List[0].Type.(*ast.Ident).Name
+		recvTypeName := ""
+		if recvType, ok := node.Decl.Recv.List[0].Type.(*ast.Ident); ok {
+			recvTypeName = recvType.Name
+		}
+		// if recvType, ok := node.Decl.Recv.List[0].Type.(*ast.SelectorExpr); ok {
+		// 	recvTypeName = recvType.Sel.Name
+		// }
+		if se, ok := node.Decl.Recv.List[0].Type.(*ast.StarExpr); ok {
+			if ident, ok := se.X.(*ast.Ident); ok {
+				recvTypeName = ident.Name
+				recv.Pointer = true
+			}
+		}
+		if se, ok := node.Decl.Recv.List[0].Type.(*ast.SelectorExpr); ok {
+			if ident, ok := se.X.(*ast.Ident); ok {
+				recvTypeName = ident.Name
+				recv.Pointer = true
+			}
+		}
+		recv.Type = recvTypeName
 		if node.Decl.Recv.List[0].Names != nil {
 			recv.Name = node.Decl.Recv.List[0].Names[0].Name
 		}
@@ -253,6 +292,11 @@ func AddFunc(data *Package, node *doc.Func, path string) {
 	for _, val := range node.Examples {
 		AddFuncExample(f, val, path)
 	}
+	return f
+}
+
+func AddFunc(data *Package, node *doc.Func, path string) {
+	f := NewFunc(node, path)
 	data.Funcs = append(data.Funcs, f)
 }
 
@@ -268,7 +312,13 @@ type Type struct {
 }
 
 func (t *Type) GetHeadingHREF() string {
-	return getHeadingHREF("type " + t.Name)
+	var b bytes.Buffer
+	err := md.TemplateDoc.ExecuteTemplate(&b, "typeHeading", t)
+	if err != nil {
+		return err.Error()
+	}
+	def := matchTypeDefinition.FindStringSubmatch(b.String())
+	return getHeadingHREF(def[0])
 }
 
 func AddType(data *Package, node *doc.Type, path string) {
@@ -295,29 +345,15 @@ func AddType(data *Package, node *doc.Type, path string) {
 }
 
 func AddTypeFunc(data *Type, node *doc.Func, path string) {
-	var buf = bytes.NewBuffer(nil)
-	position := filesets[path].Position(node.Decl.Pos())
-	printer.Fprint(buf, filesets[path], node.Decl)
-	data.Funcs = append(data.Funcs, &Func{
-		Name:       node.Name,
-		Doc:        parseComment(0, node.Doc),
-		Definition: buf.String(),
-		Line:       position.Line,
-		Filename:   filepath.Base(position.Filename),
-	})
+	// var buf = bytes.NewBuffer(nil)
+	// position := filesets[path].Position(node.Decl.Pos())
+	// printer.Fprint(buf, filesets[path], node.Decl)
+	data.Funcs = append(data.Funcs, NewFunc(node, path))
 }
 
 func AddTypeMethod(data *Type, node *doc.Func, path string) {
-	var buf = bytes.NewBuffer(nil)
-	position := filesets[path].Position(node.Decl.Pos())
-	printer.Fprint(buf, filesets[path], node.Decl)
-	data.Methods = append(data.Methods, &Func{
-		Name:       node.Name,
-		Doc:        parseComment(0, node.Doc),
-		Definition: buf.String(),
-		Line:       position.Line,
-		Filename:   filepath.Base(position.Filename),
-	})
+	data.Methods = append(data.Methods, NewFunc(node, path))
+
 }
 
 type Package struct {

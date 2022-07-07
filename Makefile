@@ -9,7 +9,7 @@ GOAUTODOC_CMD = $(GO_CMD) run main.go
 ECHO = "/usr/bin/echo"
 # GOAUTODOC_CMD = $(shell go env GOPATH)/bin/goautodoc
 TIME = $(shell date)
-LDFLAGS = -X '$(PACKAGE_NAME)/config.PackageName=$(PACKAGE_NAME)' -X '$(PACKAGE_NAME)/config.Version=$(VERSION)' -X '$(PACKAGE_NAME)/config.BuildTime=$(TIME)'
+LDFLAGS = -X '$(PACKAGE_NAME)/config.PackageName=$(PACKAGE_NAME)' -X '$(PACKAGE_NAME)/config.Version=$(VERSION)'
 
 build-linux-amd64:
 	echo "Compiling linux-amd64"
