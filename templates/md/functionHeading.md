@@ -1,0 +1,1 @@
+{{ define "functionHeading" }}## func [{{ template "functionDefinition" . }}]({{ if .Filename }}<{{ .Filename }}{{ if .Line }}#L{{ .Line }}{{ end }}>){{ end }}{{- end }}

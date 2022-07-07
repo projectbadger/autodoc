@@ -1,0 +1,1 @@
+{{ define "functionDefinition" }}{{ .Name }}({{ if .Params }}{{ .FormatParams }}{{ end }}){{ if .Results }} {{ .FormatResultsBrackets }}{{ end }}{{ end }}
