@@ -165,7 +165,7 @@ var matchFuncDefinition = regexp.MustCompile(`func\s*(\([\w\s*]+\))?\s*\[(.+)\]\
 var matchTypeDefinition = regexp.MustCompile(`type\s*\[(.+)\]\(`)
 
 func getHeadingHREF(str string) string {
-	str = strings.ToLower(str)
+	str = strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(str, ")", ""), "(", ""))
 	return strings.Trim(matchChars.ReplaceAllLiteralString(str, "-"), "-")
 }
 

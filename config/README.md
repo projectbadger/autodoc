@@ -47,7 +47,7 @@ configFilePath := config.Cfg.File
   - [NewDefaultConfigApp() ConfigApp](#func-newdefaultconfigapp-configapp)
   - [CheckIsVersion()](#func-configapp-checkisversion)
   - [IsVersion() bool](#func-configapp-isversion-bool)
-  - [SaveToFile(string) error](#func-configapp-savetofile-string-error)
+  - [SaveToFile(string) error](#func-configapp-savetofilestring-error)
   - [SetupDefault()](#func-configapp-setupdefault)
 - [type ConfigTemplates](#type-configtemplates)
   - [Copy() (error, ConfigTemplates)](#func-configtemplates-copy-error-configtemplates)

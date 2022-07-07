@@ -9,7 +9,7 @@ Documentation templates
 
 ## Index
 
-- [OutputTemplatesToDir(string) error](#func-outputtemplatestodir-string-error)
+- [OutputTemplatesToDir(string) error](#func-outputtemplatestodirstring-error)
 - [SetupTemplates() error](#func-setuptemplates-error)
 
 

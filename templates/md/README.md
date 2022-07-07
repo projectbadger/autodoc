@@ -7,9 +7,9 @@ import github.com/projectbadger/autodoc/templates/md
 
 ## Index
 
-- [ExecuteTemplate(string) (string, error)](#func-executetemplate-string-string-error)
+- [ExecuteTemplate(string) (string, error)](#func-executetemplatestring-string-error)
 - [GetTemplatesBytes()](#func-gettemplatesbytes)
-- [OutputTemplatesToDir(string) error](#func-outputtemplatestodir-string-error)
+- [OutputTemplatesToDir(string) error](#func-outputtemplatestodirstring-error)
 - [ReplaceTemplates() error](#func-replacetemplates-error)
 - [SetupTemplates() error](#func-setuptemplates-error)
 
