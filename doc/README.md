@@ -47,47 +47,47 @@ import github.com/projectbadger/autodoc/doc
   - [GetHeadingHREF() string](#func-type-getheadinghref-string)
 - [type Var](#type-var)
 
-## func [AddConst(string, string, string)](<definitions.go#L49>)
+## func [AddConst(string, string, string)](<definitions.go#L48>)
 
 ```go
 func AddConst(data *Package, node *doc.Value, path string)
 ```
-## func [AddExample(string, string, string)](<definitions.go#L68>)
+## func [AddExample(string, string, string)](<definitions.go#L67>)
 
 ```go
 func AddExample(data *Package, node *doc.Example, path string)
 ```
-## func [AddFunc(string, string, string)](<definitions.go#L299>)
+## func [AddFunc(string, string, string)](<definitions.go#L298>)
 
 ```go
 func AddFunc(data *Package, node *doc.Func, path string)
 ```
-## func [AddFuncExample(string, string, string)](<definitions.go#L77>)
+## func [AddFuncExample(string, string, string)](<definitions.go#L76>)
 
 ```go
 func AddFuncExample(data *Func, node *doc.Example, path string)
 ```
-## func [AddType(string, string, string)](<definitions.go#L325>)
+## func [AddType(string, string, string)](<definitions.go#L324>)
 
 ```go
 func AddType(data *Package, node *doc.Type, path string)
 ```
-## func [AddTypeExample(string, string, string)](<definitions.go#L86>)
+## func [AddTypeExample(string, string, string)](<definitions.go#L85>)
 
 ```go
 func AddTypeExample(data *Type, node *doc.Example, path string)
 ```
-## func [AddTypeFunc(string, string, string)](<definitions.go#L348>)
+## func [AddTypeFunc(string, string, string)](<definitions.go#L347>)
 
 ```go
 func AddTypeFunc(data *Type, node *doc.Func, path string)
 ```
-## func [AddTypeMethod(string, string, string)](<definitions.go#L355>)
+## func [AddTypeMethod(string, string, string)](<definitions.go#L354>)
 
 ```go
 func AddTypeMethod(data *Type, node *doc.Func, path string)
 ```
-## func [AddVar(string, string, string)](<definitions.go#L28>)
+## func [AddVar(string, string, string)](<definitions.go#L27>)
 
 ```go
 func AddVar(data *Package, node *doc.Value, path string)
@@ -112,12 +112,12 @@ func GetGoFilesInDir(path string) []*ast.File
 ```go
 func GetPackageDocumentation(packageFilePath, packageImportPath string) (*doc.Package, error)
 ```
-## func [GetPackagesDataFromDirRecursive(string, bool, string) error](<definitions.go#L554>)
+## func [GetPackagesDataFromDirRecursive(string, bool, string) error](<definitions.go#L553>)
 
 ```go
 func GetPackagesDataFromDirRecursive(dirPath string, includeRoot bool, rootImportPath string) (map[string]*Package, error)
 ```
-## func [ParseGoMod(string, string) error](<definitions.go#L587>)
+## func [ParseGoMod(string, string) error](<definitions.go#L586>)
 
 ```go
 func ParseGoMod(pkg *Package, path string) error
@@ -127,14 +127,14 @@ func ParseGoMod(pkg *Package, path string) error
 ```go
 func ParseGoModFile(module *Module, path string) error
 ```
-## func [SeekGoMod(string, string, int) error](<definitions.go#L609>)
+## func [SeekGoMod(string, string, int) error](<definitions.go#L608>)
 
 ```go
 func SeekGoMod(pkg *Package, path string, levels int) error
 ```
 
 
-## type [Const](<definitions.go#L41>)
+## type [Const](<definitions.go#L40>)
 ```go
 type Const struct {
 	Name		string
@@ -145,7 +145,7 @@ type Const struct {
 }
 ```
 
-## type [Example](<definitions.go#L62>)
+## type [Example](<definitions.go#L61>)
 ```go
 type Example struct {
 	Name		string
@@ -154,7 +154,7 @@ type Example struct {
 }
 ```
 
-## type [Func](<definitions.go#L96>)
+## type [Func](<definitions.go#L95>)
 ```go
 type Func struct {
 	Name		string
@@ -169,39 +169,39 @@ type Func struct {
 }
 ```
 
-## func [NewFunc(string, string) Func](<definitions.go#L183>)
+## func [NewFunc(string, string) Func](<definitions.go#L182>)
 
 ```go
 func NewFunc(node *doc.Func, path string) *Func
 ```
 
-## func (*Func) [FormatParams() string](<definitions.go#L114>)
+## func (*Func) [FormatParams() string](<definitions.go#L113>)
 
 ```go
 func (f *Func) FormatParams() string
 ```
-## func (*Func) [FormatParamsBrackets() string](<definitions.go#L132>)
+## func (*Func) [FormatParamsBrackets() string](<definitions.go#L131>)
 
 ```go
 func (f *Func) FormatParamsBrackets() string
 ```
-## func (*Func) [FormatResults() string](<definitions.go#L136>)
+## func (*Func) [FormatResults() string](<definitions.go#L135>)
 
 ```go
 func (f *Func) FormatResults() string
 ```
-## func (*Func) [FormatResultsBrackets() string](<definitions.go#L157>)
+## func (*Func) [FormatResultsBrackets() string](<definitions.go#L156>)
 
 ```go
 func (f *Func) FormatResultsBrackets() string
 ```
-## func (*Func) [GetHeadingHREF() string](<definitions.go#L173>)
+## func (*Func) [GetHeadingHREF() string](<definitions.go#L172>)
 
 ```go
 func (f *Func) GetHeadingHREF() string
 ```
 
-## type [FuncVar](<definitions.go#L108>)
+## type [FuncVar](<definitions.go#L107>)
 ```go
 type FuncVar struct {
 	Name	string
@@ -228,7 +228,7 @@ type Module struct {
 func ParseModule(path string) (*Module, error)
 ```
 
-## type [Package](<definitions.go#L360>)
+## type [Package](<definitions.go#L359>)
 ```go
 type Package struct {
 	ImportPath	string
@@ -258,34 +258,34 @@ type Package struct {
 }
 ```
 
-## func [GetPackageDataFromDir(string) (Package, error)](<definitions.go#L546>)
+## func [GetPackageDataFromDir(string) (Package, error)](<definitions.go#L545>)
 
 ```go
 func GetPackageDataFromDir(path string) (*Package, error)
 ```
-## func [GetPackageDataFromDirRecursive(string) (Package, error)](<definitions.go#L535>)
+## func [GetPackageDataFromDirRecursive(string) (Package, error)](<definitions.go#L534>)
 
 ```go
 func GetPackageDataFromDirRecursive(path string) (*Package, error)
 ```
-## func [ParsePackage(string, string) (Package, error)](<definitions.go#L441>)
+## func [ParsePackage(string, string) (Package, error)](<definitions.go#L440>)
 
 ```go
 func ParsePackage(docs *doc.Package, path string) (*Package, error)
 ```
 
-## func (Package) [PathIndent()](<definitions.go#L391>)
+## func (Package) [PathIndent()](<definitions.go#L390>)
 
 ```go
 func (p Package) PathIndent() func(string) string
 ```
-## func (*Package) [PathSplit()](<definitions.go#L387>)
+## func (*Package) [PathSplit()](<definitions.go#L386>)
 
 ```go
 func (p *Package) PathSplit() []string
 ```
 
-## type [Type](<definitions.go#L304>)
+## type [Type](<definitions.go#L303>)
 ```go
 type Type struct {
 	Name		string
@@ -299,13 +299,13 @@ type Type struct {
 }
 ```
 
-## func (*Type) [GetHeadingHREF() string](<definitions.go#L315>)
+## func (*Type) [GetHeadingHREF() string](<definitions.go#L314>)
 
 ```go
 func (t *Type) GetHeadingHREF() string
 ```
 
-## type [Var](<definitions.go#L20>)
+## type [Var](<definitions.go#L19>)
 ```go
 type Var struct {
 	Name		string

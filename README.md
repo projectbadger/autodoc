@@ -1,7 +1,3 @@
-Indent level: '2'with string '/config' result: ''
-Indent level: '2'with string '/doc' result: ''
-Indent level: '2'with string '/templates' result: ''
-Indent level: '3'with string '/templates/md' result: '  '
 
 # Autodoc
 

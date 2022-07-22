@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
-	"fmt"
 	"go/ast"
 	"go/doc"
 	"go/printer"
@@ -399,7 +398,7 @@ func (p Package) PathIndent() func(string) string {
 		for i := startIx; i < len(split); i++ {
 			str += "  "
 		}
-		fmt.Printf("Indent level: '%d'with string '%s' result: '%s'\n", len(split), path, str)
+		// fmt.Printf("Indent level: '%d'with string '%s' result: '%s'\n", len(split), path, str)
 		return str
 	}
 }
