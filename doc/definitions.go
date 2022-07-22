@@ -16,6 +16,7 @@ import (
 	"github.com/projectbadger/autodoc/templates/md"
 )
 
+// Var holds variable data.
 type Var struct {
 	Name       string
 	Definition string
@@ -24,6 +25,8 @@ type Var struct {
 	Line       int
 }
 
+// AddVar parses *doc.Value that contains variables data and
+// appends a new Var struct to the provided data *Package.
 func AddVar(data *Package, node *doc.Value, path string) {
 	var buf = bytes.NewBuffer(nil)
 	printer.Fprint(buf, filesets[path], node.Decl)
@@ -45,6 +48,9 @@ type Const struct {
 	Line       int
 }
 
+// AddConst parses *doc.Value that contains constants data
+// and appends a new Var struct to the provided data
+// *Package.
 func AddConst(data *Package, node *doc.Value, path string) {
 	var buf = bytes.NewBuffer(nil)
 	position := filesets[path].Position(node.Decl.Pos())
@@ -58,12 +64,16 @@ func AddConst(data *Package, node *doc.Value, path string) {
 	})
 }
 
+// Example holds documentation example data.
 type Example struct {
 	Name       string
 	Definition string
 	Doc        string
 }
 
+// AddVar parses *doc.Example containing example data and
+// appends a new *Example to the provided data
+// *Package.
 func AddExample(data *Package, node *doc.Example, path string) {
 	var buf = bytes.NewBuffer(nil)
 	printer.Fprint(buf, filesets[path], node.Code)
@@ -73,6 +83,10 @@ func AddExample(data *Package, node *doc.Example, path string) {
 		Definition: buf.String(),
 	})
 }
+
+// AddFuncExample parses *doc.Example containing example
+// data and appends a new *Example to the provided data
+// *Package.
 func AddFuncExample(data *Func, node *doc.Example, path string) {
 	var buf = bytes.NewBuffer(nil)
 	printer.Fprint(buf, filesets[path], node.Code)
@@ -82,6 +96,10 @@ func AddFuncExample(data *Func, node *doc.Example, path string) {
 		Definition: buf.String(),
 	})
 }
+
+// AddTypeExample parses *doc.Example containing example
+// data and appends a new *Example to the provided data
+// *Package.
 func AddTypeExample(data *Type, node *doc.Example, path string) {
 	var buf = bytes.NewBuffer(nil)
 	printer.Fprint(buf, filesets[path], node.Code)
@@ -92,6 +110,7 @@ func AddTypeExample(data *Type, node *doc.Example, path string) {
 	})
 }
 
+// Func holds function data.
 type Func struct {
 	Name       string
 	Definition string
@@ -110,6 +129,8 @@ type FuncVar struct {
 	Pointer bool
 }
 
+// FormatParams returns function parameters with names
+// removed.
 func (f *Func) FormatParams() string {
 	str := ""
 	noTypeCount := 0
@@ -128,10 +149,14 @@ func (f *Func) FormatParams() string {
 	return strings.TrimRight(str, ", ")
 }
 
+// FormatParams returns function parameters in brackets
+// with names removed.
 func (f *Func) FormatParamsBrackets() string {
 	return "(" + f.FormatResults() + ")"
 }
 
+// FormatResults returns function results with names
+// removed.
 func (f *Func) FormatResults() string {
 	str := ""
 	if len(f.Results) == 1 {
@@ -153,6 +178,8 @@ func (f *Func) FormatResults() string {
 	return strings.TrimRight(str, ", ")
 }
 
+// FormatResultsBrackets returns function results with names
+// removed in brackets.
 func (f *Func) FormatResultsBrackets() string {
 	if len(f.Results) < 2 {
 		return f.FormatResults()
@@ -169,6 +196,8 @@ func getHeadingHREF(str string) string {
 	return strings.Trim(matchChars.ReplaceAllLiteralString(str, "-"), "-")
 }
 
+// GetHeadingHREF returns function definition, formated as a
+// name for a relative link.
 func (f *Func) GetHeadingHREF() string {
 	var b bytes.Buffer
 	err := md.TemplateDoc.ExecuteTemplate(&b, "functionHeading", f)
@@ -179,6 +208,7 @@ func (f *Func) GetHeadingHREF() string {
 	return getHeadingHREF(def[0])
 }
 
+// NewFunc parses *doc.Func and returns a *Func.
 func NewFunc(node *doc.Func, path string) *Func {
 	var buf = bytes.NewBuffer(nil)
 	printer.Fprint(buf, filesets[path], node.Decl)
@@ -295,11 +325,14 @@ func NewFunc(node *doc.Func, path string) *Func {
 	return f
 }
 
+// AddFunc parses *doc.Func and appends a new *Func to the
+// provided data *Package.
 func AddFunc(data *Package, node *doc.Func, path string) {
 	f := NewFunc(node, path)
 	data.Funcs = append(data.Funcs, f)
 }
 
+// Type holds type data.
 type Type struct {
 	Name       string
 	Definition string
@@ -311,6 +344,8 @@ type Type struct {
 	Line       int
 }
 
+// GetHeadingHREF returns type definition, formated as a
+// name for a relative link.
 func (t *Type) GetHeadingHREF() string {
 	var b bytes.Buffer
 	err := md.TemplateDoc.ExecuteTemplate(&b, "typeHeading", t)
@@ -321,6 +356,8 @@ func (t *Type) GetHeadingHREF() string {
 	return getHeadingHREF(def[0])
 }
 
+// AddType parses *doc.Type and appends a new *Type to the
+// provided data *Package.
 func AddType(data *Package, node *doc.Type, path string) {
 	var buf = bytes.NewBuffer(nil)
 	position := filesets[path].Position(node.Decl.Pos())
@@ -344,6 +381,8 @@ func AddType(data *Package, node *doc.Type, path string) {
 	data.Types = append(data.Types, t)
 }
 
+// AddTypeFunc parses *doc.Func from a *doc.Type and appends a
+// new *Func to the provided data *Package.
 func AddTypeFunc(data *Type, node *doc.Func, path string) {
 	// var buf = bytes.NewBuffer(nil)
 	// position := filesets[path].Position(node.Decl.Pos())
@@ -351,11 +390,14 @@ func AddTypeFunc(data *Type, node *doc.Func, path string) {
 	data.Funcs = append(data.Funcs, NewFunc(node, path))
 }
 
+// AddTypeMethod parses *doc.Func from a *doc.Type and appends a
+// new *Func to the provided data *Package.
 func AddTypeMethod(data *Type, node *doc.Func, path string) {
 	data.Methods = append(data.Methods, NewFunc(node, path))
 
 }
 
+// Package holds package data for use in templates.
 type Package struct {
 	ImportPath      string
 	Name            string
@@ -383,10 +425,14 @@ type Package struct {
 	ShowImportPath  bool
 }
 
+// PathSplit returns the package relative path, split by the
+// '/' character.
 func (p *Package) PathSplit() []string {
 	return strings.Split(p.Path, "/")
 }
 
+// PathIdent returns 2 spaces for every '/' character in the
+// path.
 func (p Package) PathIndent() func(string) string {
 	return func(path string) string {
 		startIx := 1
@@ -437,6 +483,8 @@ func getCustomVars() map[string]string {
 	return vars
 }
 
+// ParsePackage parses go files in a directory and returns
+// a *Package.
 func ParsePackage(docs *doc.Package, path string) (*Package, error) {
 	if docs == nil {
 		return nil, errors.New("doc is nil")
@@ -531,6 +579,8 @@ func ParsePackage(docs *doc.Package, path string) (*Package, error) {
 	return p, nil
 }
 
+// GetPackageDataFromDirRecursive parses all the .go files
+// in the path recursively.
 func GetPackageDataFromDirRecursive(path string) (*Package, error) {
 
 	p, err := GetPackageDataFromDir(path)
@@ -542,6 +592,8 @@ func GetPackageDataFromDirRecursive(path string) (*Package, error) {
 	return p, err
 }
 
+// GetPackageDataFromDirRecursive parses all the .go files
+// in the provided directory.
 func GetPackageDataFromDir(path string) (*Package, error) {
 	docs, err := GetPackageDocumentation(path, config.Cfg.Templates.ImportPath)
 	if err != nil {
@@ -550,6 +602,9 @@ func GetPackageDataFromDir(path string) (*Package, error) {
 	return ParsePackage(docs, path)
 }
 
+// GetPackagesDataFromDirRecursive parses all the .go files
+// in the directories in the path recursively and returns
+// them as a map[string]*Package with path as key.
 func GetPackagesDataFromDirRecursive(dirPath string, includeRoot bool, rootImportPath string) (map[string]*Package, error) {
 	dirPath, err := filepath.Abs(dirPath)
 	if err != nil {
@@ -583,6 +638,8 @@ func GetPackagesDataFromDirRecursive(dirPath string, includeRoot bool, rootImpor
 	return packages, nil
 }
 
+// ParseGoMod parses a go.mod file and fills the data in the
+// provided *Package.
 func ParseGoMod(pkg *Package, path string) error {
 	file, err := os.Open(filepath.Join(path, "go.mod"))
 	if err != nil {
@@ -605,6 +662,8 @@ func ParseGoMod(pkg *Package, path string) error {
 	return nil
 }
 
+// SeekGoMod seeks a go.mod file for a provided number of
+// levels upwards.
 func SeekGoMod(pkg *Package, path string, levels int) error {
 	path, err := filepath.Abs(path)
 	if err != nil {

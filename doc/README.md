@@ -47,47 +47,87 @@ import github.com/projectbadger/autodoc/doc
   - [GetHeadingHREF() string](#func-type-getheadinghref-string)
 - [type Var](#type-var)
 
-## func [AddConst(string, string, string)](<definitions.go#L48>)
+## func [AddConst(string, string, string)](<definitions.go#L54>)
+
+AddConst parses *doc.Value that contains constants data
+and appends a new Var struct to the provided data
+*Package.
+
 
 ```go
 func AddConst(data *Package, node *doc.Value, path string)
 ```
-## func [AddExample(string, string, string)](<definitions.go#L67>)
+## func [AddExample(string, string, string)](<definitions.go#L77>)
+
+AddVar parses *doc.Example containing example data and
+appends a new *Example to the provided data
+*Package.
+
 
 ```go
 func AddExample(data *Package, node *doc.Example, path string)
 ```
-## func [AddFunc(string, string, string)](<definitions.go#L298>)
+## func [AddFunc(string, string, string)](<definitions.go#L330>)
+
+AddFunc parses *doc.Func and appends a new *Func to the
+provided data *Package.
+
 
 ```go
 func AddFunc(data *Package, node *doc.Func, path string)
 ```
-## func [AddFuncExample(string, string, string)](<definitions.go#L76>)
+## func [AddFuncExample(string, string, string)](<definitions.go#L90>)
+
+AddFuncExample parses *doc.Example containing example
+data and appends a new *Example to the provided data
+*Package.
+
 
 ```go
 func AddFuncExample(data *Func, node *doc.Example, path string)
 ```
-## func [AddType(string, string, string)](<definitions.go#L324>)
+## func [AddType(string, string, string)](<definitions.go#L361>)
+
+AddType parses *doc.Type and appends a new *Type to the
+provided data *Package.
+
 
 ```go
 func AddType(data *Package, node *doc.Type, path string)
 ```
-## func [AddTypeExample(string, string, string)](<definitions.go#L85>)
+## func [AddTypeExample(string, string, string)](<definitions.go#L103>)
+
+AddTypeExample parses *doc.Example containing example
+data and appends a new *Example to the provided data
+*Package.
+
 
 ```go
 func AddTypeExample(data *Type, node *doc.Example, path string)
 ```
-## func [AddTypeFunc(string, string, string)](<definitions.go#L347>)
+## func [AddTypeFunc(string, string, string)](<definitions.go#L386>)
+
+AddTypeFunc parses *doc.Func from a *doc.Type and appends a
+new *Func to the provided data *Package.
+
 
 ```go
 func AddTypeFunc(data *Type, node *doc.Func, path string)
 ```
-## func [AddTypeMethod(string, string, string)](<definitions.go#L354>)
+## func [AddTypeMethod(string, string, string)](<definitions.go#L395>)
+
+AddTypeMethod parses *doc.Func from a *doc.Type and appends a
+new *Func to the provided data *Package.
+
 
 ```go
 func AddTypeMethod(data *Type, node *doc.Func, path string)
 ```
-## func [AddVar(string, string, string)](<definitions.go#L27>)
+## func [AddVar(string, string, string)](<definitions.go#L30>)
+
+AddVar parses *doc.Value that contains variables data and
+appends a new Var struct to the provided data *Package.
+
 
 ```go
 func AddVar(data *Package, node *doc.Value, path string)
@@ -112,29 +152,45 @@ func GetGoFilesInDir(path string) []*ast.File
 ```go
 func GetPackageDocumentation(packageFilePath, packageImportPath string) (*doc.Package, error)
 ```
-## func [GetPackagesDataFromDirRecursive(string, bool, string) error](<definitions.go#L553>)
+## func [GetPackagesDataFromDirRecursive(string, bool, string) error](<definitions.go#L608>)
+
+GetPackagesDataFromDirRecursive parses all the .go files
+in the directories in the path recursively and returns
+them as a map[string]*Package with path as key.
+
 
 ```go
 func GetPackagesDataFromDirRecursive(dirPath string, includeRoot bool, rootImportPath string) (map[string]*Package, error)
 ```
-## func [ParseGoMod(string, string) error](<definitions.go#L586>)
+## func [ParseGoMod(string, string) error](<definitions.go#L643>)
+
+ParseGoMod parses a go.mod file and fills the data in the
+provided *Package.
+
 
 ```go
 func ParseGoMod(pkg *Package, path string) error
 ```
-## func [ParseGoModFile(string, string) error](<module.go#L33>)
+## func [ParseGoModFile(string, string) error](<module.go#L37>)
+
+ParseGoModFile parses a go.mod file.
+
 
 ```go
 func ParseGoModFile(module *Module, path string) error
 ```
-## func [SeekGoMod(string, string, int) error](<definitions.go#L608>)
+## func [SeekGoMod(string, string, int) error](<definitions.go#L667>)
+
+SeekGoMod seeks a go.mod file for a provided number of
+levels upwards.
+
 
 ```go
 func SeekGoMod(pkg *Package, path string, levels int) error
 ```
 
 
-## type [Const](<definitions.go#L40>)
+## type [Const](<definitions.go#L43>)
 ```go
 type Const struct {
 	Name		string
@@ -145,7 +201,9 @@ type Const struct {
 }
 ```
 
-## type [Example](<definitions.go#L61>)
+## type [Example](<definitions.go#L68>)
+
+Example holds documentation example data.
 ```go
 type Example struct {
 	Name		string
@@ -154,7 +212,9 @@ type Example struct {
 }
 ```
 
-## type [Func](<definitions.go#L95>)
+## type [Func](<definitions.go#L114>)
+
+Func holds function data.
 ```go
 type Func struct {
 	Name		string
@@ -169,39 +229,62 @@ type Func struct {
 }
 ```
 
-## func [NewFunc(string, string) Func](<definitions.go#L182>)
+## func [NewFunc(string, string) Func](<definitions.go#L212>)
+
+NewFunc parses *doc.Func and returns a *Func.
+
 
 ```go
 func NewFunc(node *doc.Func, path string) *Func
 ```
 
-## func (*Func) [FormatParams() string](<definitions.go#L113>)
+## func (*Func) [FormatParams() string](<definitions.go#L134>)
+
+FormatParams returns function parameters with names
+removed.
+
 
 ```go
 func (f *Func) FormatParams() string
 ```
-## func (*Func) [FormatParamsBrackets() string](<definitions.go#L131>)
+## func (*Func) [FormatParamsBrackets() string](<definitions.go#L154>)
+
+FormatParams returns function parameters in brackets
+with names removed.
+
 
 ```go
 func (f *Func) FormatParamsBrackets() string
 ```
-## func (*Func) [FormatResults() string](<definitions.go#L135>)
+## func (*Func) [FormatResults() string](<definitions.go#L160>)
+
+FormatResults returns function results with names
+removed.
+
 
 ```go
 func (f *Func) FormatResults() string
 ```
-## func (*Func) [FormatResultsBrackets() string](<definitions.go#L156>)
+## func (*Func) [FormatResultsBrackets() string](<definitions.go#L183>)
+
+FormatResultsBrackets returns function results with names
+removed in brackets.
+
 
 ```go
 func (f *Func) FormatResultsBrackets() string
 ```
-## func (*Func) [GetHeadingHREF() string](<definitions.go#L172>)
+## func (*Func) [GetHeadingHREF() string](<definitions.go#L201>)
+
+GetHeadingHREF returns function definition, formated as a
+name for a relative link.
+
 
 ```go
 func (f *Func) GetHeadingHREF() string
 ```
 
-## type [FuncVar](<definitions.go#L107>)
+## type [FuncVar](<definitions.go#L126>)
 ```go
 type FuncVar struct {
 	Name	string
@@ -210,7 +293,9 @@ type FuncVar struct {
 }
 ```
 
-## type [Module](<module.go#L10>)
+## type [Module](<module.go#L11>)
+
+Module holds module info.
 ```go
 type Module struct {
 	Name		string			`json:"name" yaml:"name"`
@@ -222,13 +307,19 @@ type Module struct {
 }
 ```
 
-## func [ParseModule(string) (Module, error)](<module.go#L19>)
+## func [ParseModule(string) (Module, error)](<module.go#L22>)
+
+ParseModule parses a go module in the provided path and
+returns a *Module.
+
 
 ```go
 func ParseModule(path string) (*Module, error)
 ```
 
-## type [Package](<definitions.go#L359>)
+## type [Package](<definitions.go#L401>)
+
+Package holds package data for use in templates.
 ```go
 type Package struct {
 	ImportPath	string
@@ -258,34 +349,56 @@ type Package struct {
 }
 ```
 
-## func [GetPackageDataFromDir(string) (Package, error)](<definitions.go#L545>)
+## func [GetPackageDataFromDir(string) (Package, error)](<definitions.go#L597>)
+
+GetPackageDataFromDirRecursive parses all the .go files
+in the provided directory.
+
 
 ```go
 func GetPackageDataFromDir(path string) (*Package, error)
 ```
-## func [GetPackageDataFromDirRecursive(string) (Package, error)](<definitions.go#L534>)
+## func [GetPackageDataFromDirRecursive(string) (Package, error)](<definitions.go#L584>)
+
+GetPackageDataFromDirRecursive parses all the .go files
+in the path recursively.
+
 
 ```go
 func GetPackageDataFromDirRecursive(path string) (*Package, error)
 ```
-## func [ParsePackage(string, string) (Package, error)](<definitions.go#L440>)
+## func [ParsePackage(string, string) (Package, error)](<definitions.go#L488>)
+
+ParsePackage parses go files in a directory and returns
+a *Package.
+
 
 ```go
 func ParsePackage(docs *doc.Package, path string) (*Package, error)
 ```
 
-## func (Package) [PathIndent()](<definitions.go#L390>)
+## func (Package) [PathIndent()](<definitions.go#L436>)
+
+PathIdent returns 2 spaces for every '/' character in the
+path.
+
 
 ```go
 func (p Package) PathIndent() func(string) string
 ```
-## func (*Package) [PathSplit()](<definitions.go#L386>)
+## func (*Package) [PathSplit()](<definitions.go#L430>)
+
+PathSplit returns the package relative path, split by the
+'/' character.
+
 
 ```go
 func (p *Package) PathSplit() []string
 ```
 
-## type [Type](<definitions.go#L303>)
+## type [Type](<definitions.go#L336>)
+
+Type holds type data.
 ```go
 type Type struct {
 	Name		string
@@ -299,13 +412,19 @@ type Type struct {
 }
 ```
 
-## func (*Type) [GetHeadingHREF() string](<definitions.go#L314>)
+## func (*Type) [GetHeadingHREF() string](<definitions.go#L349>)
+
+GetHeadingHREF returns type definition, formated as a
+name for a relative link.
+
 
 ```go
 func (t *Type) GetHeadingHREF() string
 ```
 
-## type [Var](<definitions.go#L19>)
+## type [Var](<definitions.go#L20>)
+
+Var holds variable data.
 ```go
 type Var struct {
 	Name		string
