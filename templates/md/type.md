@@ -1,6 +1,7 @@
 {{ define "type" }}{{ if .Name }}
-## type [{{ .Name }}]({{ if .Filename }}<{{ .Filename }}{{ if .Line }}#L{{ .Line }}{{ end }}>{{ end }})
+{{ template "typeHeading" . }}
 {{- end }}{{ if .Doc }}
+
 {{ .Doc }}
 {{- end }}
 ```go

@@ -9,7 +9,7 @@ GOAUTODOC_CMD = $(GO_CMD) run main.go
 ECHO = "/usr/bin/echo"
 # GOAUTODOC_CMD = $(shell go env GOPATH)/bin/goautodoc
 TIME = $(shell date)
-LDFLAGS = -X '$(PACKAGE_NAME)/config.PackageName=$(PACKAGE_NAME)' -X '$(PACKAGE_NAME)/config.Version=$(VERSION)' -X '$(PACKAGE_NAME)/config.BuildTime=$(TIME)'
+LDFLAGS = -X '$(PACKAGE_NAME)/config.PackageName=$(PACKAGE_NAME)' -X '$(PACKAGE_NAME)/config.Version=$(VERSION)'
 
 build-linux-amd64:
 	echo "Compiling linux-amd64"
@@ -36,7 +36,6 @@ build-docs:
 	$(GOAUTODOC_CMD) -package ./config > ./config/README.md
 	$(GOAUTODOC_CMD) -package ./doc > ./doc/README.md
 	$(GOAUTODOC_CMD) -package ./templates > ./templates/README.md
-	$(GOAUTODOC_CMD) -package ./templates/functions > ./templates/functions/README.md
 	$(GOAUTODOC_CMD) -package ./templates/md > ./templates/md/README.md
 
 show-info:

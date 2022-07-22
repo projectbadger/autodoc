@@ -1,0 +1,1 @@
+{{ define "typeHeading" }}## type [{{ .Name }}]({{ if .Filename }}<{{ .Filename }}{{ if .Line }}#L{{ .Line }}{{ end }}>){{ end }}{{- end }}

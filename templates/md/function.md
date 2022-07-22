@@ -1,6 +1,8 @@
 {{ define "function" }}{{ template "functionHeading" . }}{{ if .Doc }}
+
 {{ .Doc }}
 {{ end }}
+
 ```go
 {{ .Definition }}
 ```
