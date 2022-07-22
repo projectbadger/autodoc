@@ -160,7 +160,7 @@ func (f *Func) FormatResultsBrackets() string {
 	return "(" + f.FormatResults() + ")"
 }
 
-var matchChars = regexp.MustCompile(`[^a-z0-9-/]+|-+`)
+var matchChars = regexp.MustCompile(`[^a-z0-9-/_]+|-+`)
 var matchFuncDefinition = regexp.MustCompile(`func\s*(\([\w\s*]+\))?\s*\[(.+)\]\(`)
 var matchTypeDefinition = regexp.MustCompile(`type\s*\[(.+)\]\(`)
 
