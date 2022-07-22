@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
+	"fmt"
 	"go/ast"
 	"go/doc"
 	"go/printer"
@@ -381,6 +382,26 @@ type Package struct {
 	ShowSubpackages bool
 	ShowOverview    bool
 	ShowImportPath  bool
+}
+
+func (p *Package) PathSplit() []string {
+	return strings.Split(p.Path, "/")
+}
+
+func (p Package) PathIndent() func(string) string {
+	return func(path string) string {
+		startIx := 1
+		if strings.HasPrefix(path, "/") {
+			startIx = 2
+		}
+		split := strings.Split(path, "/")
+		str := ""
+		for i := startIx; i < len(split); i++ {
+			str += "  "
+		}
+		fmt.Printf("Indent level: '%d'with string '%s' result: '%s'\n", len(split), path, str)
+		return str
+	}
 }
 
 func getCustomVars() map[string]string {

@@ -1,3 +1,7 @@
+Indent level: '2'with string '/config' result: ''
+Indent level: '2'with string '/doc' result: ''
+Indent level: '2'with string '/templates' result: ''
+Indent level: '3'with string '/templates/md' result: '  '
 
 # Autodoc
 
@@ -35,9 +39,8 @@ autodoc -package . -included-data all,-types,-vars,-constants,
 
 ## Subpackages
 
-- [config](config)
+- [config](/config)
 - [doc](/doc)
 - [templates](/templates)
-- [functions](/templates/functions)
-- [md](templates/md)
+  - [md](/templates/md)
 
