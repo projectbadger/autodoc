@@ -17,7 +17,7 @@ import {{ .ImportPath }}
 {{ template "subpackages" . }}{{ end }}
 {{ end }}{{ if .ShowIndex }}{{ if or .Funcs .Types .Vars .Constants }}
 ## Index
-{{ end }}
+{{- end }}
 {{ template "index" . }}
 {{ end }}{{ if .ShowConsts }}{{ if .Constants }}
 {{ template "constants" . }}{{ end }}
